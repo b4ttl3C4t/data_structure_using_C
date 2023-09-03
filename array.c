@@ -83,7 +83,7 @@ int search(int length, int *arr, int index)
     return arr[index];
 }
 
-//search an element at a specific index.
+//update an element at a specific index.
 //operation of array supports for direct access.
 void update(int length, int *arr, int index, int data)
 {
