@@ -1,32 +1,21 @@
 #include <stdio.h>
+#include "array.h"
 
-#define BUF_SIZE 50
-
-//function prototype for operation of array:
-void    traverse(int, int *);
-void    insertion(int, int *, int, int);
-void    deletion(int, int *, int);
-int     search(int, int *, int);
-void    update(int, int *, int, int);
-
-int main(void)
-{
-    int arr[BUF_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-    traverse(15, arr);
-    
-    insertion(15, arr, 5, 99);
-    traverse(16, arr);
-    
-    deletion(16, arr, 5);
-    traverse(15, arr);
-    
-    printf("%d \n", search(16, arr, 5));
-    
-    update(16, arr, 10, 100);
-    traverse(15, arr);
-
-    return 0;
-}
+/*----------------------code for testing----------------------
+ *   int arr[BUF_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+ *   traverse(15, arr);
+ *  
+ *   insertion(15, arr, 5, 99);
+ *   traverse(16, arr);
+ *   
+ *   deletion(16, arr, 5);
+ *   traverse(15, arr);
+ *   
+ *   printf("%d \n", search(16, arr, 5));
+ *   
+ *   update(16, arr, 10, 100);
+ *   traverse(15, arr);
+ */
 
 //print each element of array:
 void traverse(int length, int *arr)
