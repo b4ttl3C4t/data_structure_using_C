@@ -83,7 +83,6 @@ static Node *sentinel_node;
 
 
 //function prototype for operation of linked list:
-void    alloca_node (Node *);
 void    insert_head (Node *);
 void    insert_tail (Node *);
 void    delete_head (Node *);
