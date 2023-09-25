@@ -176,12 +176,13 @@ static inline void circular_delete_tail(Node *node)
 
 
 /*----------------------------------------function *display* begin----------------------------------------*/
-static inline void singly_display  (Node *node);
-static inline void circular_display(Node *node);
+static inline void singly_display     (Node *node);
+static inline void polynomial_display (Node *node);
+static inline void circular_display   (Node *node);
 
 static void (*display_choose[LIST_TYPE_SIZE])(Node *node) = 
 { 
-    singly_display, singly_display, singly_display, circular_display
+    singly_display, polynomial_display, singly_display, circular_display
 };
 
 void display(Node *node)
@@ -198,7 +199,7 @@ void display(Node *node)
 }
 
 static inline void singly_display(Node *node)
-/*All the type of linked list except circular linked list could be displayed step by step,
+/*Both singly linked list and doubly linked list could be displayed step by step,
  *not having to care the minute difference between them in most of the time.
  */
 {
@@ -208,6 +209,19 @@ static inline void singly_display(Node *node)
         printf("%d ", node->singly->data);
         node->singly = node->singly->next;
     } while (node->singly != NULL);
+}
+
+static inline void polynomial_display(Node *node)
+/*All the type of linked list except circular linked list could be displayed step by step,
+ *not having to care the minute difference between them in most of the time.
+ */
+{
+    sentinel_node = NULL;
+    do
+    {
+        printf("%dx^%d", node->polynomial->coefficient, node->polynomial->power);
+        node->polynomial = node->polynomial->next;
+    } while (node->polynomial != NULL);
 }
 
 static inline void circular_display(Node *node)
@@ -232,37 +246,37 @@ static inline void circular_display(Node *node)
 
 
 /*----------------------------------------function *insert* begin----------------------------------------*/
-static inline void singly_insert     (Node *node, int index);
-static inline void polynomial_insert (Node *node, int index);
-static inline void doubly_insert     (Node *node, int index);
-static inline void circular_insert   (Node *node, int index);
+static inline void singly_insert     (Node *node, unsigned int index);
+static inline void polynomial_insert (Node *node, unsigned int index);
+static inline void doubly_insert     (Node *node, unsigned int index);
+static inline void circular_insert   (Node *node, unsigned int index);
 
-static void (*insert_choose[LIST_TYPE_SIZE])(Node *node, int index) = 
+static void (*insert_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
 { 
     singly_insert, polynomial_insert, doubly_insert, circular_insert
 };
 
-void insert(Node *node, int index)
+void insert(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void singly_insert(Node *node, int index)
+static inline void singly_insert(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void polynomial_insert(Node *node, int index)
+static inline void polynomial_insert(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void doubly_insert(Node *node, int index)
+static inline void doubly_insert(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void circular_insert(Node *node, int index)
+static inline void circular_insert(Node *node, unsigned int index)
 {
     ;
 }
@@ -273,37 +287,37 @@ static inline void circular_insert(Node *node, int index)
 
 
 /*----------------------------------------function *delete* begin----------------------------------------*/
-static inline void singly_delete     (Node *node, int index);
-static inline void polynomial_delete (Node *node, int index);
-static inline void doubly_delete     (Node *node, int index);
-static inline void circular_delete   (Node *node, int index);
+static inline void singly_delete     (Node *node, unsigned int index);
+static inline void polynomial_delete (Node *node, unsigned int index);
+static inline void doubly_delete     (Node *node, unsigned int index);
+static inline void circular_delete   (Node *node, unsigned int index);
 
-static void (*delete_choose[LIST_TYPE_SIZE])(Node *node, int index) = 
+static void (*delete_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
 { 
     singly_delete, polynomial_delete, doubly_delete, circular_delete
 };
 
-void delete(Node *node, int index)
+void delete(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void singly_delete(Node *node, int index)
+static inline void singly_delete(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void polynomial_delete(Node *node, int index)
+static inline void polynomial_delete(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void doubly_delete(Node *node, int index)
+static inline void doubly_delete(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline void circular_delete(Node *node, int index)
+static inline void circular_delete(Node *node, unsigned int index)
 {
     ;
 }
@@ -314,37 +328,37 @@ static inline void circular_delete(Node *node, int index)
 
 
 /*----------------------------------------function *search* begin----------------------------------------*/
-static inline int singly_search     (Node *node, int index);
-static inline int polynomial_search (Node *node, int index);
-static inline int doubly_search     (Node *node, int index);
-static inline int circular_search   (Node *node, int index);
+static inline int singly_search     (Node *node, unsigned int index);
+static inline int polynomial_search (Node *node, unsigned int index);
+static inline int doubly_search     (Node *node, unsigned int index);
+static inline int circular_search   (Node *node, unsigned int index);
 
-static int (*search_choose[LIST_TYPE_SIZE])(Node *node, int index) = 
+static int (*search_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
 { 
     singly_search, polynomial_search, doubly_search, circular_search
 };
 
-int search(Node *node, int index)
+int search(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline int singly_search(Node *node, int index)
+static inline int singly_search(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline int polynomial_search(Node *node, int index)
+static inline int polynomial_search(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline int doubly_search(Node *node, int index)
+static inline int doubly_search(Node *node, unsigned int index)
 {
     ;
 }
 
-static inline int circular_search(Node *node, int index)
+static inline int circular_search(Node *node, unsigned int index)
 {
     ;
 }
