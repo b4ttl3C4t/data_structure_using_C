@@ -1,5 +1,15 @@
 #define LIST_SIZE 50
+#define LIST_TYPE_SIZE 4
 
+
+
+enum LIST_TYPE
+{
+    singly      = 0,
+    polynomial  = 1,
+    doubly      = 2,
+    circular    = 3,
+};
 
 
 /*The definition of singly listed list .
@@ -10,6 +20,18 @@ typedef struct SINGLY_LINKED_LIST
     int data;
     struct SINGLY_LINKED_LIST *next;
 }singly_linked_list;
+
+
+
+/*The definition of singly listed list .
+ *(The data is set by type *int* .)
+ */
+typedef struct POLYNOMIAL_LINKED_LIST
+{
+    int coefficient;
+    int power;
+    struct POLYNOMIAL_LINKED_LIST *next;
+}polynomial_linked_list;
 
 
 
@@ -45,20 +67,28 @@ typedef struct CIRCULAR_LINKED_LIST
 //Constructing compound linked list type, then setting the mode by variable *type* .
 typedef struct NODE
 {
-    unsigned int type;
+    enum LIST_TYPE type;
     union
     {
-        singly_linked_list   *singly;
-        doubly_linked_list   *doubly;
-        circular_linked_list *circular;
+        singly_linked_list      *singly;
+        polynomial_linked_list  *polynomial;
+        doubly_linked_list      *doubly;
+        circular_linked_list    *circular;
     };
-}node;
+}Node;
 
+
+//The *sentinel node* means the end of a linked list.
+static Node *sentinel_node;
 
 
 //function prototype for operation of linked list:
-void    display(int, node *);
-void    insertion(int, node *, int, int);
-void    deletion(int, node *, int);
-int     search(int, node *, int);
-void    update(int, node *, int, int);
+void    alloca_node (Node *);
+void    insert_head (Node *);
+void    insert_tail (Node *);
+void    delete_head (Node *);
+void    delete_tail (Node *);
+void    display     (Node *);
+void    insert      (Node *, unsigned int);
+void    delete      (Node *, unsigned int);
+int     search      (Node *, unsigned int);
