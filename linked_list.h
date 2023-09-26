@@ -1,8 +1,11 @@
 #define LIST_SIZE 50
 #define LIST_TYPE_SIZE 4
+#define LINKED_LIST_MALLOC_ERROR "The memory allocation for linked list aborts."
 
 
-
+/*You should set the mode for the newer node (as following)
+ *whenever you construst it.
+ */
 enum LIST_TYPE
 {
     singly      = 0,
@@ -28,8 +31,8 @@ typedef struct SINGLY_LINKED_LIST
  */
 typedef struct POLYNOMIAL_LINKED_LIST
 {
-    int coefficient;
-    int power;
+    double coefficient;
+    unsigned int power;
     struct POLYNOMIAL_LINKED_LIST *next;
 }polynomial_linked_list;
 
@@ -83,10 +86,11 @@ static Node *sentinel_node;
 
 
 //function prototype for operation of linked list:
-void    insert_head (Node *);
-void    insert_tail (Node *);
-void    delete_head (Node *);
-void    delete_tail (Node *);
+void    input_data  (Node *);
+void    insert_head (Node **);
+void    insert_tail (Node **);
+void    delete_head (Node **);
+void    delete_tail (Node **);
 void    display     (Node *);
 void    insert      (Node *, unsigned int);
 void    delete      (Node *, unsigned int);
