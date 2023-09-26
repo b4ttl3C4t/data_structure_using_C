@@ -5,19 +5,6 @@
 int main(void)
 {
     Node *head = (Node *)malloc(sizeof(Node));
-    head->type = singly;
-    head->singly->data = 456;
-    
-    printf("%p %d\n\n", head, head->singly->data);
-    
-    insert_head(&head);
-    printf("%p %d\n", head, head->singly->data);
-    printf("%p %d\n\n", head->singly->next, head->singly->next->data);
-
-    insert_head(&head);
-    printf("%p %d\n", head, head->singly->data);
-    printf("%p %d\n", head->singly->next, head->singly->next->data);
-    printf("%p %d\n\n", head->singly->next->next, head->singly->next->next->data);
 
     return 0;
 }
@@ -46,13 +33,13 @@ inline void input_data(Node *node)
  */
 static inline void singly_input_data(Node *node)
 {
-    scanf("%u%d", &node->type, &node->singly->data);
+    scanf("%u%d", node->type, node->singly.data);
     getchar();
 }
 
 static inline void polynomial_input_data(Node *node)
 {
-    scanf("%lf%u", &node->polynomial->coefficient, &node->polynomial->power);
+    scanf("%lf%u", node->polynomial.coefficient, node->polynomial.power);
     getchar();
     //Setting the *type* mode
     node->type = 1;
@@ -64,25 +51,26 @@ static inline void polynomial_input_data(Node *node)
 
 
 /*----------------------------------------function *insert_head* begin----------------------------------------*/
-static inline void singly_insert_head     (Node **node);
-static inline void polynomial_insert_head (Node **node);
-static inline void doubly_insert_head     (Node **node);
-static inline void circular_insert_head   (Node **node);
+static inline void singly_insert_head     (Node *node);
+static inline void polynomial_insert_head (Node *node);
+static inline void doubly_insert_head     (Node *node);
+static inline void circular_insert_head   (Node *node);
 
-static void (*insert_head_choose[LIST_TYPE_SIZE])(Node **node) = 
+static void (*insert_head_choose[LIST_TYPE_SIZE])(Node *node) = 
 { 
     singly_insert_head, polynomial_insert_head, doubly_insert_head, circular_insert_head
 };
 
-void insert_head(Node **node)
+void insert_head(Node *node)
 {
-    insert_head_choose[(*node)->type](node);
+    insert_head_choose[node->type](node);
 }
 
-static inline void singly_insert_head(Node **node)
+static inline void singly_insert_head(Node *node)
 {
-    Node *head = malloc(sizeof(Node));
-    
+    static Node *head = NULL;
+    head = (Node *)malloc(sizeof(Node));
+    puts("adsf");
     if(head == NULL)
     {
         fprintf(stderr, "%s\n", LINKED_LIST_MALLOC_ERROR);
@@ -90,22 +78,22 @@ static inline void singly_insert_head(Node **node)
     }
 
     singly_input_data(head);
-    head->singly->next = (*node)->singly;
+    head->singly.next = node;
 
-    *node = head;
+    node = head;
 }
 
-static inline void polynomial_insert_head(Node **node)
+static inline void polynomial_insert_head(Node *node)
 {
     ;
 }
 
-static inline void doubly_insert_head(Node **node)
+static inline void doubly_insert_head(Node *node)
 {
     ;
 }
 
-static inline void circular_insert_head(Node **node)
+static inline void circular_insert_head(Node *node)
 {
     ;
 }
@@ -116,37 +104,37 @@ static inline void circular_insert_head(Node **node)
 
 
 /*----------------------------------------function *insert_tail* begin----------------------------------------*/
-static inline void singly_insert_tail     (Node **node);
-static inline void polynomial_insert_tail (Node **node);
-static inline void doubly_insert_tail     (Node **node);
-static inline void circular_insert_tail   (Node **node);
+static inline void singly_insert_tail     (Node *node);
+static inline void polynomial_insert_tail (Node *node);
+static inline void doubly_insert_tail     (Node *node);
+static inline void circular_insert_tail   (Node *node);
 
-static void (*insert_tail_choose[LIST_TYPE_SIZE])(Node **node) = 
+static void (*insert_tail_choose[LIST_TYPE_SIZE])(Node *node) = 
 { 
     singly_insert_tail, polynomial_insert_tail, doubly_insert_tail, circular_insert_tail
 };
 
-void insert_tail(Node **node)
+void insert_tail(Node *node)
 {
     ;
 }
 
-static inline void singly_insert_tail(Node **node)
+static inline void singly_insert_tail(Node *node)
 {
     ;
 }
 
-static inline void polynomial_insert_tail(Node **node)
+static inline void polynomial_insert_tail(Node *node)
 {
     ;
 }
 
-static inline void doubly_insert_tail(Node **node)
+static inline void doubly_insert_tail(Node *node)
 {
     ;
 }
 
-static inline void circular_insert_tail(Node **node)
+static inline void circular_insert_tail(Node *node)
 {
     ;
 }
@@ -157,37 +145,37 @@ static inline void circular_insert_tail(Node **node)
 
 
 /*----------------------------------------function *delete_head* begin----------------------------------------*/
-static inline void singly_delete_head     (Node **node);
-static inline void polynomial_delete_head (Node **node);
-static inline void doubly_delete_head     (Node **node);
-static inline void circular_delete_head   (Node **node);
+static inline void singly_delete_head     (Node *node);
+static inline void polynomial_delete_head (Node *node);
+static inline void doubly_delete_head     (Node *node);
+static inline void circular_delete_head   (Node *node);
 
-static void (*delete_head_choose[LIST_TYPE_SIZE])(Node **node) = 
+static void (*delete_head_choose[LIST_TYPE_SIZE])(Node *node) = 
 { 
     singly_delete_head, polynomial_delete_head, doubly_delete_head, circular_delete_head
 };
 
-void delete_head(Node **node)
+void delete_head(Node *node)
 {
     ;
 }
 
-static inline void singly_delete_head(Node **node)
+static inline void singly_delete_head(Node *node)
 {
     ;
 }
 
-static inline void polynomial_delete_head(Node **node)
+static inline void polynomial_delete_head(Node *node)
 {
     ;
 }
 
-static inline void doubly_delete_head(Node **node)
+static inline void doubly_delete_head(Node *node)
 {
     ;
 }
 
-static inline void circular_delete_head(Node **node)
+static inline void circular_delete_head(Node *node)
 {
     ;
 }
@@ -198,37 +186,37 @@ static inline void circular_delete_head(Node **node)
 
 
 /*----------------------------------------function *delete_tail* begin----------------------------------------*/
-static inline void singly_delete_tail     (Node **node);
-static inline void polynomial_delete_tail (Node **node);
-static inline void doubly_delete_tail     (Node **node);
-static inline void circular_delete_tail   (Node **node);
+static inline void singly_delete_tail     (Node *node);
+static inline void polynomial_delete_tail (Node *node);
+static inline void doubly_delete_tail     (Node *node);
+static inline void circular_delete_tail   (Node *node);
 
-static void (*delete_tail_choose[LIST_TYPE_SIZE])(Node **node) = 
+static void (*delete_tail_choose[LIST_TYPE_SIZE])(Node *node) = 
 { 
     singly_delete_tail, polynomial_delete_tail, doubly_delete_tail, circular_delete_tail
 };
 
-void delete_tail(Node **node)
+void delete_tail(Node *node)
 {
     ;
 }
 
-static inline void singly_delete_tail(Node **node)
+static inline void singly_delete_tail(Node *node)
 {
     ;
 }
 
-static inline void polynomial_delete_tail(Node **node)
+static inline void polynomial_delete_tail(Node *node)
 {
     ;
 }
 
-static inline void doubly_delete_tail(Node **node)
+static inline void doubly_delete_tail(Node *node)
 {
     ;
 }
 
-static inline void circular_delete_tail(Node **node)
+static inline void circular_delete_tail(Node *node)
 {
     ;
 }
@@ -269,9 +257,9 @@ static inline void singly_display(Node *node)
     sentinel_node = NULL;
     do
     {
-        printf("%d ", node->singly->data);
-        node->singly = node->singly->next;
-    } while (node->singly != NULL);
+        printf("%d ", node->singly.data);
+        node = node->singly.next;
+    } while (node != NULL);
 }
 
 static inline void polynomial_display(Node *node)
@@ -282,9 +270,9 @@ static inline void polynomial_display(Node *node)
     sentinel_node = NULL;
     do
     {
-        printf("%dx^%d", node->polynomial->coefficient, node->polynomial->power);
-        node->polynomial = node->polynomial->next;
-    } while (node->polynomial != NULL);
+        printf("%lfx^%d", node->polynomial.coefficient, node->polynomial.power);
+        node = node->polynomial.next;
+    } while (node != NULL);
 }
 
 static inline void circular_display(Node *node)
@@ -298,9 +286,9 @@ static inline void circular_display(Node *node)
 
     do
     {
-        printf("%d ", node->circular->data);
-        node->circular = node->circular->next;
-    } while (node->circular != sentinel_node->circular);
+        printf("%d ", node->circular.data);
+        node = node->circular.next;
+    } while (node != sentinel_node);
 }
 /*----------------------------------------function *display* end  ----------------------------------------*/
 
@@ -314,12 +302,12 @@ static inline void polynomial_insert (Node *node, unsigned int index);
 static inline void doubly_insert     (Node *node, unsigned int index);
 static inline void circular_insert   (Node *node, unsigned int index);
 
-static void (*insert_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
+static void (*insertion_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
 { 
     singly_insert, polynomial_insert, doubly_insert, circular_insert
 };
 
-void insert(Node *node, unsigned int index)
+void insertion(Node *node, unsigned int index)
 {
     ;
 }
@@ -355,12 +343,12 @@ static inline void polynomial_delete (Node *node, unsigned int index);
 static inline void doubly_delete     (Node *node, unsigned int index);
 static inline void circular_delete   (Node *node, unsigned int index);
 
-static void (*delete_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
+static void (*deletion_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
 { 
     singly_delete, polynomial_delete, doubly_delete, circular_delete
 };
 
-void delete(Node *node, unsigned int index)
+void deletion(Node *node, unsigned int index)
 {
     ;
 }
