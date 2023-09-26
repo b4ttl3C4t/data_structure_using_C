@@ -2,25 +2,13 @@
 #define LIST_TYPE_SIZE 4
 #define LINKED_LIST_MALLOC_ERROR "The memory allocation for linked list aborts."
 
-enum   LinkedListType;
 struct SinglyLinkedList;
 struct PolynomialLinkedList;
 struct DoublyLinkedList;
 struct CircularLinkedList;
+struct Node;
 
-//Constructing compound linked list type, then setting the mode by variable *type* .
-typedef struct Node
-{
-    enum LinkedListType type;
-    
-    union
-    {
-        struct SinglyLinkedList      singly;
-        struct PolynomialLinkedList  polynomial;
-        struct DoublyLinkedList      doubly;
-        struct CircularLinkedList    circular;
-    };
-}Node;
+typedef struct Node Node;
 
 //The *sentinel node* means the end of a linked list.
 Node *sentinel_node;
@@ -80,7 +68,19 @@ struct CircularLinkedList
  *and we construct the circular_linked_list type based on doubly linked list.
  */
 
-
+//Constructing compound linked list type, then setting the mode by variable *type* .
+struct Node
+{
+    enum LinkedListType type;
+    
+    union
+    {
+        struct SinglyLinkedList      singly;
+        struct PolynomialLinkedList  polynomial;
+        struct DoublyLinkedList      doubly;
+        struct CircularLinkedList    circular;
+    };
+};
 
 //function prototype for operation of linked list:
 void    input_data  (Node *);
