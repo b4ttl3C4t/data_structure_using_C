@@ -1,6 +1,9 @@
 #define LIST_SIZE 50
 #define LIST_TYPE_SIZE 4
-#define LINKED_LIST_MALLOC_ERROR "The memory allocation for linked list aborts."
+#define MALLOC_ERROR    "The memory allocation for linked list aborts."
+#define MODE_ERROR      "The mode is not accessible."
+#define OPCODE_ERROR    "The opcode is not accessible."
+#define INDEX_ERROR     "The node does not exist."
 
 struct SinglyLinkedList;
 struct PolynomialLinkedList;
@@ -29,7 +32,8 @@ enum LinkedListType
  */
 struct SinglyLinkedList
 {
-    int data;
+    signed long long int data;
+    signed long long int :0;
     Node *next;
 };
 
@@ -38,8 +42,8 @@ struct SinglyLinkedList
  */
 struct PolynomialLinkedList
 {
+    unsigned long long int power;
     double coefficient;
-    unsigned int power;
     Node *next;
 };
 
@@ -48,9 +52,10 @@ struct PolynomialLinkedList
  */
 struct DoublyLinkedList
 {
-    int data;
-    Node *prev;
+    signed long long int data;
+    signed long long int :0;
     Node *next;
+    Node *prev;
 };
 
 /*The definition of circular listed list definition.
@@ -58,9 +63,10 @@ struct DoublyLinkedList
  */
 struct CircularLinkedList
 {
-    int data;
-    Node *prev;
+    signed long long int data;
+    signed long long int :0;
     Node *next;
+    Node *prev;
 };
 /*The circular_linked_list is as singly_linked_list or doubly_linked_list,
  *but there is no NULL to be linked, instead of 
@@ -83,12 +89,14 @@ struct Node
 };
 
 //function prototype for operation of linked list:
-void    input_data  (Node *);
-void    insert_head (Node *);
-void    insert_tail (Node *);
-void    delete_head (Node *);
-void    delete_tail (Node *);
-void    display     (Node *);
-void    insertion   (Node *, unsigned int);
-void    deletion    (Node *, unsigned int);
-int     search      (Node *, unsigned int);
+Node *  initialization  (void);
+void    control_table   (Node *);
+void    input_data      (Node *);
+void    insert_head     (Node *);
+void    insert_tail     (Node *);
+void    delete_head     (Node *);
+void    delete_tail     (Node *);
+void    display         (Node *);
+void    insertion       (Node *, unsigned int);
+void    deletion        (Node *, unsigned int);
+int     search          (Node *, unsigned int);

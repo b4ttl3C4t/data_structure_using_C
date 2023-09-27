@@ -4,11 +4,116 @@
 
 int main(void)
 {
-    Node *head = (Node *)malloc(sizeof(Node));
+    Node *head = initialization();
 
+    
     return 0;
 }
 
+Node * initialization(void)
+{
+    printf("\n%s", "> Initialization: Allocating the memory space for head node.");
+    Node *head = (Node *)calloc(1, sizeof(Node));
+
+    //Probing whether the memory allocation success.
+    if(head == NULL)
+    {
+        fprintf(stderr, "\n> Initialization: %s", MALLOC_ERROR);
+        return NULL;
+    }
+
+    printf("\n%s", "> Initialization: The memory allocation completes!");
+    printf("\n%s\n%s\n%s\n%s\n%s",  "> Initialization: Type mode table as following:",
+                                    "  | 0 | singly linked list     |",
+                                    "  | 1 | polynomial linked list |",
+                                    "  | 2 | doubly linked list     |",
+                                    "  | 3 | circular linked list   |");
+    
+    //Interface for setting mode.
+    printf("\n%s", "> Initialization: Please set the type mode for the head node:");
+    scanf("%u", &head->type);
+    getchar();
+    
+    //Probing whether the type mode is correct.
+    if(head->type >= LIST_TYPE_SIZE)
+    {
+        fprintf(stderr, "\n> Initialization: %s", MODE_ERROR);
+        return NULL;
+    }
+
+    input_data(head);
+
+    return head;
+}
+
+void control_table(Node *node)
+{
+    unsigned int opcode, index;
+
+    pritnf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",  
+                        "> control_table: What do you want to do now?",
+                        "  | 0 | insert_head |",
+                        "  | 1 | insert_tail |",
+                        "  | 2 | delete_head |",
+                        "  | 3 | delete_tail |",
+                        "  | 4 | display     |",
+                        "  | 5 | insertion   |",
+                        "  | 6 | deletion    |",
+                        "  | 7 | search      |");
+    scanf("%u", &opcode);
+    getchar();
+
+    /*switch(opcode)
+    {
+    case 0:
+        insert_head(node);
+        break;
+    
+    case 1:
+        insert_tail(node);
+        break;
+    
+    case 2:
+        delete_head(node);
+        break;
+    
+    case 3:
+        delete_tail(node);
+        break;
+    
+    case 4:
+        display(node);
+        break;
+    
+    case 5:
+        printf("\n%s", "> control_table: The function needs a index to insert the node to designed location.");
+        scanf("%u", &index);
+        getchar();
+
+        insertion(node, index);
+        break;
+    
+    case 6:
+        printf("\n%s", "> control_table: The function needs a index to delete the node of designed location.");
+        scanf("%u", &index);
+        getchar();
+
+        deletion(node, index);
+        break;
+    
+    case 7:
+        printf("\n%s", "> control_table: The function needs a index to search the designed node.");
+        scanf("%u", &index);
+        getchar();
+
+        search(node, index);
+        break;
+    
+    default:
+        fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
+        return ;
+    }*/
+}
 
 /*----------------------------------------function *input_data* begin----------------------------------------*/
 static inline void singly_input_data     (Node *node);
@@ -23,6 +128,7 @@ static void (*input_data_choose[LIST_TYPE_SIZE])(Node *node) =
 
 inline void input_data(Node *node)
 {
+    printf("\n%s", "> input_data: Please set the data for the head node:");
     input_data_choose[node->type](node);
 }
 
@@ -33,16 +139,14 @@ inline void input_data(Node *node)
  */
 static inline void singly_input_data(Node *node)
 {
-    scanf("%u%d", node->type, node->singly.data);
+    scanf("%d", &node->singly.data);
     getchar();
 }
 
 static inline void polynomial_input_data(Node *node)
 {
-    scanf("%lf%u", node->polynomial.coefficient, node->polynomial.power);
+    scanf("%lf%u", &node->polynomial.coefficient, &node->polynomial.power);
     getchar();
-    //Setting the *type* mode
-    node->type = 1;
 }
 /*----------------------------------------function *input_data* end  ----------------------------------------*/
 
@@ -70,13 +174,15 @@ static inline void singly_insert_head(Node *node)
 {
     static Node *head = NULL;
     head = (Node *)malloc(sizeof(Node));
-    puts("adsf");
+    
     if(head == NULL)
     {
-        fprintf(stderr, "%s\n", LINKED_LIST_MALLOC_ERROR);
+        fprintf(stderr, "%s\n", MALLOC_ERROR);
         return ;
     }
 
+    //Setting the type and input data.
+    head->type = node->type;
     singly_input_data(head);
     head->singly.next = node;
 
@@ -257,7 +363,7 @@ static inline void singly_display(Node *node)
     sentinel_node = NULL;
     do
     {
-        printf("%d ", node->singly.data);
+        printf("%lld ", node->singly.data);
         node = node->singly.next;
     } while (node != NULL);
 }
@@ -268,11 +374,16 @@ static inline void polynomial_display(Node *node)
  */
 {
     sentinel_node = NULL;
-    do
+    while(1)
     {
-        printf("%lfx^%d", node->polynomial.coefficient, node->polynomial.power);
+        printf("%lfx^%u", node->polynomial.coefficient, node->polynomial.power);
         node = node->polynomial.next;
-    } while (node != NULL);
+
+        if(node != NULL)
+            break;
+        
+        printf("%s", " + ");
+    }
 }
 
 static inline void circular_display(Node *node)
@@ -286,7 +397,7 @@ static inline void circular_display(Node *node)
 
     do
     {
-        printf("%d ", node->circular.data);
+        printf("%lld ", node->circular.data);
         node = node->circular.next;
     } while (node != sentinel_node);
 }
