@@ -89,24 +89,26 @@ struct Node
 };
 
 //Function prototype for operation of linked list:
-void   control_table   (Node **);
-void   initialization  (void);
-void   termination     (Node *);
+void   l_control_table   (Node **);
+Node * l_initialization  (void);
+void   l_termination     (Node *);
 
-Node * insertion       (Node *);
-Node * insert_head     (Node *);
-void   insert_tail     (Node *);
+Node * l_construction    (Node *);
+Node * l_insertion       (Node *);
+Node * l_insert_head     (Node *);
+void   l_insert_tail     (Node *);
 
-Node * deletion        (Node *);
-Node * delete_head     (Node *);
-void   delete_tail     (Node *);
+void   l_destruction     (Node *);
+Node * l_deletion        (Node *);
+Node * l_delete_head     (Node *);
+void   l_delete_tail     (Node *);
 
 //Useful operation and algorithm based on divergent linked list type.
-Node * search          (Node *);
-void   display         (Node *);
-Node * list_sort       (Node *);
-Node * list_reverse    (Node *);
-bool   is_list_empty   (Node *);
+Node * l_search          (Node *);
+void   l_display         (Node *);
+Node * l_sort            (Node *);
+Node * l_reverse         (Node *);
+bool   l_is_list_empty   (Node *);
 
 //The following algorithm is only for polynomial linked list.
 void   polynomial_addition          (Node *, Node *);
