@@ -4,10 +4,94 @@
 
 int main(void)
 {
-    Node *head = initialization();
+    Node *head;
 
+    do
+    {
+        /* code */
+    } while (head != NULL);
     
     return 0;
+}
+
+
+
+
+
+void control_table(Node *node)
+{
+    unsigned int opcode, index;
+
+    pritnf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",  
+                        "> control_table: What do you want to do now?",
+                        "  | 0 | initialization |",
+                        "  | 1 | termination    |",
+                        "  | 2 | insertion      |",
+                        "  | 3 | insert_head    |",
+                        "  | 4 | insert_tail    |",
+                        "  | 5 | deletion       |",
+                        "  | 6 | delete_head    |",
+                        "  | 7 | delete_tail    |",
+                        "  | 8 | search         |",
+                        "  | 9 | display        |");
+    scanf("%u", &opcode);
+    getchar();
+
+    switch(opcode)
+    {
+    case 0:
+        return initialization();
+
+    case 1:
+        termination(node);
+        break;
+   
+    case 2:
+        printf("\n%s", "> control_table: The function needs a index to insert the node to designed location.");
+        scanf("%u", &index);
+        getchar();
+        insertion(node, index);
+        break;
+
+    case 3:
+        insert_head(node);
+        break;
+    
+    case 4:
+        insert_tail(node);
+        break;
+
+    case 5:
+        printf("\n%s", "> control_table: The function needs a index to delete the node of designed location.");
+        scanf("%u", &index);
+        getchar();
+        deletion(node, index);
+        break;
+    
+    case 6:
+        delete_head(node);
+        break;
+    
+    case 7:
+        delete_tail(node);
+        break;
+    
+    case 8:
+        printf("\n%s", "> control_table: The function needs a index to search the designed node.");
+        scanf("%u", &index);
+        getchar();
+        return search(node, index);
+    
+    case 9:
+        display(node);
+        break;
+    
+    default:
+        fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
+        break;
+    }
+
+    return NULL;
 }
 
 Node * initialization(void)
@@ -46,131 +130,76 @@ Node * initialization(void)
     return head;
 }
 
-void control_table(Node *node)
+void termination(Node *head)
 {
-    unsigned int opcode, index;
 
-    pritnf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",  
-                        "> control_table: What do you want to do now?",
-                        "  | 0 | insert_head |",
-                        "  | 1 | insert_tail |",
-                        "  | 2 | delete_head |",
-                        "  | 3 | delete_tail |",
-                        "  | 4 | display     |",
-                        "  | 5 | insertion   |",
-                        "  | 6 | deletion    |",
-                        "  | 7 | search      |");
-    scanf("%u", &opcode);
-    getchar();
-
-    /*switch(opcode)
-    {
-    case 0:
-        insert_head(node);
-        break;
-    
-    case 1:
-        insert_tail(node);
-        break;
-    
-    case 2:
-        delete_head(node);
-        break;
-    
-    case 3:
-        delete_tail(node);
-        break;
-    
-    case 4:
-        display(node);
-        break;
-    
-    case 5:
-        printf("\n%s", "> control_table: The function needs a index to insert the node to designed location.");
-        scanf("%u", &index);
-        getchar();
-
-        insertion(node, index);
-        break;
-    
-    case 6:
-        printf("\n%s", "> control_table: The function needs a index to delete the node of designed location.");
-        scanf("%u", &index);
-        getchar();
-
-        deletion(node, index);
-        break;
-    
-    case 7:
-        printf("\n%s", "> control_table: The function needs a index to search the designed node.");
-        scanf("%u", &index);
-        getchar();
-
-        search(node, index);
-        break;
-    
-    default:
-        fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
-        return ;
-    }*/
 }
 
-/*----------------------------------------function *input_data* begin----------------------------------------*/
-static inline void singly_input_data     (Node *node);
-static inline void polynomial_input_data (Node *node);
-static inline void doubly_input_data     (Node *node);
-static inline void circular_input_data   (Node *node);
 
-static void (*input_data_choose[LIST_TYPE_SIZE])(Node *node) = 
-{ 
-    singly_input_data, polynomial_input_data, singly_input_data, singly_input_data
-};
 
-inline void input_data(Node *node)
+
+
+/*----------------------------------------function *insertion*      begin----------------------------------------*/
+static inline void singly_insert     (Node *node, unsigned int index);
+static inline void polynomial_insert (Node *node, unsigned int index);
+static inline void doubly_insert     (Node *node, unsigned int index);
+static inline void circular_insert   (Node *node, unsigned int index);
+
+void insertion(Node *node, unsigned int index)
 {
-    printf("\n%s", "> input_data: Please set the data for the head node:");
-    input_data_choose[node->type](node);
+    ;
 }
 
-/*Even though you can do the identical task 
- *with singly, doubly and circular linked list
- *by function *singly_input_data*
- *you still have to set the *type* mode (like 0, 2, 3) of the node.
- */
-static inline void singly_input_data(Node *node)
+static inline void singly_insert(Node *node, unsigned int index)
 {
-    scanf("%d", &node->singly.data);
-    getchar();
+    ;
 }
 
-static inline void polynomial_input_data(Node *node)
+static inline void polynomial_insert(Node *node, unsigned int index)
 {
-    scanf("%lf%u", &node->polynomial.coefficient, &node->polynomial.power);
-    getchar();
+    ;
 }
-/*----------------------------------------function *input_data* end  ----------------------------------------*/
 
+static inline void doubly_insert(Node *node, unsigned int index)
+{
+    ;
+}
 
+static inline void circular_insert(Node *node, unsigned int index)
+{
+    ;
+}
+/*----------------------------------------function *insertion*      end  ----------------------------------------*/
 
-
-
-/*----------------------------------------function *insert_head* begin----------------------------------------*/
-static inline void singly_insert_head     (Node *node);
-static inline void polynomial_insert_head (Node *node);
-static inline void doubly_insert_head     (Node *node);
-static inline void circular_insert_head   (Node *node);
-
-static void (*insert_head_choose[LIST_TYPE_SIZE])(Node *node) = 
-{ 
-    singly_insert_head, polynomial_insert_head, doubly_insert_head, circular_insert_head
-};
+/*----------------------------------------function *insert_head*    begin----------------------------------------*/
+static inline Node * singly_insert_head     (Node *node);
+static inline Node * polynomial_insert_head (Node *node);
+static inline Node * doubly_insert_head     (Node *node);
+static inline Node * circular_insert_head   (Node *node);
 
 void insert_head(Node *node)
 {
-    insert_head_choose[node->type](node);
+    switch(node->type)
+    {
+    case 0:
+        singly_insert_head(node);
+        break;
+
+    case 1:
+        polynomial_insert_head(node);
+        break;
+
+    case 2:
+        doubly_insert_head(node);
+        break;
+
+    case 3:
+        circular_insert_head(node);
+        break;
+    }
 }
 
-static inline void singly_insert_head(Node *node)
+static inline Node * singly_insert_head(Node *node)
 {
     static Node *head = NULL;
     head = (Node *)malloc(sizeof(Node));
@@ -189,36 +218,27 @@ static inline void singly_insert_head(Node *node)
     node = head;
 }
 
-static inline void polynomial_insert_head(Node *node)
+static inline Node * polynomial_insert_head(Node *node)
 {
     ;
 }
 
-static inline void doubly_insert_head(Node *node)
+static inline Node * doubly_insert_head(Node *node)
 {
     ;
 }
 
-static inline void circular_insert_head(Node *node)
+static inline Node * circular_insert_head(Node *node)
 {
     ;
 }
-/*----------------------------------------function *insert_head* end  ----------------------------------------*/
+/*----------------------------------------function *insert_head*    end  ----------------------------------------*/
 
-
-
-
-
-/*----------------------------------------function *insert_tail* begin----------------------------------------*/
+/*----------------------------------------function *insert_tail*    begin----------------------------------------*/
 static inline void singly_insert_tail     (Node *node);
 static inline void polynomial_insert_tail (Node *node);
 static inline void doubly_insert_tail     (Node *node);
 static inline void circular_insert_tail   (Node *node);
-
-static void (*insert_tail_choose[LIST_TYPE_SIZE])(Node *node) = 
-{ 
-    singly_insert_tail, polynomial_insert_tail, doubly_insert_tail, circular_insert_tail
-};
 
 void insert_tail(Node *node)
 {
@@ -244,22 +264,49 @@ static inline void circular_insert_tail(Node *node)
 {
     ;
 }
-/*----------------------------------------function *insert_tail* end  ----------------------------------------*/
+/*----------------------------------------function *insert_tail*    end  ----------------------------------------*/
 
 
 
 
 
-/*----------------------------------------function *delete_head* begin----------------------------------------*/
+/*----------------------------------------function *deletion*       begin----------------------------------------*/
+static inline void singly_delete     (Node *node, unsigned int index);
+static inline void polynomial_delete (Node *node, unsigned int index);
+static inline void doubly_delete     (Node *node, unsigned int index);
+static inline void circular_delete   (Node *node, unsigned int index);
+
+void deletion(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline void singly_delete(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline void polynomial_delete(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline void doubly_delete(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline void circular_delete(Node *node, unsigned int index)
+{
+    ;
+}
+/*----------------------------------------function *deletion*       end  ----------------------------------------*/
+
+/*----------------------------------------function *delete_head*    begin----------------------------------------*/
 static inline void singly_delete_head     (Node *node);
 static inline void polynomial_delete_head (Node *node);
 static inline void doubly_delete_head     (Node *node);
 static inline void circular_delete_head   (Node *node);
-
-static void (*delete_head_choose[LIST_TYPE_SIZE])(Node *node) = 
-{ 
-    singly_delete_head, polynomial_delete_head, doubly_delete_head, circular_delete_head
-};
 
 void delete_head(Node *node)
 {
@@ -285,22 +332,13 @@ static inline void circular_delete_head(Node *node)
 {
     ;
 }
-/*----------------------------------------function *delete_head* end  ----------------------------------------*/
+/*----------------------------------------function *delete_head*    end  ----------------------------------------*/
 
-
-
-
-
-/*----------------------------------------function *delete_tail* begin----------------------------------------*/
+/*----------------------------------------function *delete_tail*    begin----------------------------------------*/
 static inline void singly_delete_tail     (Node *node);
 static inline void polynomial_delete_tail (Node *node);
 static inline void doubly_delete_tail     (Node *node);
 static inline void circular_delete_tail   (Node *node);
-
-static void (*delete_tail_choose[LIST_TYPE_SIZE])(Node *node) = 
-{ 
-    singly_delete_tail, polynomial_delete_tail, doubly_delete_tail, circular_delete_tail
-};
 
 void delete_tail(Node *node)
 {
@@ -326,21 +364,48 @@ static inline void circular_delete_tail(Node *node)
 {
     ;
 }
-/*----------------------------------------function *delete_tail* end  ----------------------------------------*/
+/*----------------------------------------function *delete_tail*    end  ----------------------------------------*/
 
 
 
 
 
-/*----------------------------------------function *display* begin----------------------------------------*/
+/*----------------------------------------function *search*         begin----------------------------------------*/
+static inline int singly_search     (Node *node, unsigned int index);
+static inline int polynomial_search (Node *node, unsigned int index);
+static inline int doubly_search     (Node *node, unsigned int index);
+static inline int circular_search   (Node *node, unsigned int index);
+
+Node * search(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline int singly_search(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline int polynomial_search(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline int doubly_search(Node *node, unsigned int index)
+{
+    ;
+}
+
+static inline int circular_search(Node *node, unsigned int index)
+{
+    ;
+}
+/*----------------------------------------function *search*         end  ----------------------------------------*/
+
+/*----------------------------------------function *display*        begin----------------------------------------*/
 static inline void singly_display     (Node *node);
 static inline void polynomial_display (Node *node);
 static inline void circular_display   (Node *node);
-
-static void (*display_choose[LIST_TYPE_SIZE])(Node *node) = 
-{ 
-    singly_display, polynomial_display, singly_display, circular_display
-};
 
 void display(Node *node)
 {
@@ -349,7 +414,30 @@ void display(Node *node)
         printf("%s", "It's not a booked type.");
         return ;
     }
-    display_choose[node->type](node);
+    
+    switch(node->type)
+    {
+    case 0:
+        singly_display(node);
+        break;
+
+    case 1:
+        polynomial_display(node);
+        break;
+
+    case 2:
+        /*There is no difference between singly and doubly linked list
+         *when navigating through both the linked list type,
+         *so you can use the same function on it.
+         */
+        singly_display(node);
+        break;
+
+    case 3:
+        circular_display(node);
+        break;
+    }
+
     //Resetting the sentinel node by NULL (or nil).
     sentinel_node = NULL;
     puts("");
@@ -401,127 +489,50 @@ static inline void circular_display(Node *node)
         node = node->circular.next;
     } while (node != sentinel_node);
 }
-/*----------------------------------------function *display* end  ----------------------------------------*/
+/*----------------------------------------function *display*        end  ----------------------------------------*/
 
+/*----------------------------------------function *input_data*     begin----------------------------------------*/
+static inline void singly_input_data     (Node *node);
+static inline void polynomial_input_data (Node *node);
 
-
-
-
-/*----------------------------------------function *insert* begin----------------------------------------*/
-static inline void singly_insert     (Node *node, unsigned int index);
-static inline void polynomial_insert (Node *node, unsigned int index);
-static inline void doubly_insert     (Node *node, unsigned int index);
-static inline void circular_insert   (Node *node, unsigned int index);
-
-static void (*insertion_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
-{ 
-    singly_insert, polynomial_insert, doubly_insert, circular_insert
-};
-
-void insertion(Node *node, unsigned int index)
+static void input_data(Node *node)
 {
-    ;
+    switch(node->type)
+    {
+    case 0:
+        singly_input_data(node);
+        break;
+
+    case 1:
+        polynomial_input_data(node);
+        break;
+
+    case 2:
+        singly_input_data(node);
+        break;
+
+    case 3:
+        singly_input_data(node);
+        break;
+    }
 }
 
-static inline void singly_insert(Node *node, unsigned int index)
+/*Even though you can do the identical task 
+ *with singly, doubly and circular linked list
+ *by function *singly_input_data*
+ *you still have to set the *type* mode (like 0, 2, 3) of the node.
+ */
+static inline void singly_input_data(Node *node)
 {
-    ;
+    printf("\n%s", "> input_data: Please set the data for the head node:");
+    scanf("%d", &node->singly.data);
+    getchar();
 }
 
-static inline void polynomial_insert(Node *node, unsigned int index)
+static inline void polynomial_input_data(Node *node)
 {
-    ;
+    printf("\n%s", "> input_data: Please set the data for the head node (polynomial):");
+    scanf("%lf%u", &node->polynomial.coefficient, &node->polynomial.power);
+    getchar();
 }
-
-static inline void doubly_insert(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void circular_insert(Node *node, unsigned int index)
-{
-    ;
-}
-/*----------------------------------------function *insert* end  ----------------------------------------*/
-
-
-
-
-
-/*----------------------------------------function *delete* begin----------------------------------------*/
-static inline void singly_delete     (Node *node, unsigned int index);
-static inline void polynomial_delete (Node *node, unsigned int index);
-static inline void doubly_delete     (Node *node, unsigned int index);
-static inline void circular_delete   (Node *node, unsigned int index);
-
-static void (*deletion_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
-{ 
-    singly_delete, polynomial_delete, doubly_delete, circular_delete
-};
-
-void deletion(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void singly_delete(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void polynomial_delete(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void doubly_delete(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void circular_delete(Node *node, unsigned int index)
-{
-    ;
-}
-/*----------------------------------------function *delete* end  ----------------------------------------*/
-
-
-
-
-
-/*----------------------------------------function *search* begin----------------------------------------*/
-static inline int singly_search     (Node *node, unsigned int index);
-static inline int polynomial_search (Node *node, unsigned int index);
-static inline int doubly_search     (Node *node, unsigned int index);
-static inline int circular_search   (Node *node, unsigned int index);
-
-static int (*search_choose[LIST_TYPE_SIZE])(Node *node, unsigned int index) = 
-{ 
-    singly_search, polynomial_search, doubly_search, circular_search
-};
-
-int search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int singly_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int polynomial_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int doubly_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int circular_search(Node *node, unsigned int index)
-{
-    ;
-}
-/*----------------------------------------function *search* end  ----------------------------------------*/
+/*----------------------------------------function *input_data*     end  ----------------------------------------*/
