@@ -1,15 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "linked_list.h"
 
 int main(void)
 {
     Node *head;
 
-    do
-    {
-        /* code */
-    } while (head != NULL);
+    unsigned int opcode;
+
+    while(1)
+    { 
+        pritnf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",  
+                            "> control_table: What do you want to do now?",
+                            "  | 0 | initialization |",
+                            "  | 1 | termination    |",
+                            "  | 2 | insertion      |",
+                            "  | 3 | insert_head    |",
+                            "  | 4 | insert_tail    |",
+                            "  | 5 | deletion       |",
+                            "  | 6 | delete_head    |",
+                            "  | 7 | delete_tail    |",
+                            "  | 8 | search         |",
+                            "  | 9 | display        |",
+                            "  |  other  |   EXIT   |");
+        scanf("%u", &opcode);
+        getchar();
+
+        if(opcode > 9)
+        {
+            fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
+            return 1;
+        }
+        
+        control_table(&head, opcode);
+    }
     
     return 0;
 }
@@ -18,83 +43,64 @@ int main(void)
 
 
 
-void control_table(Node *node)
+void l_control_table(Node **node, unsigned int opcode)
 {
-    unsigned int opcode, index;
-
-    pritnf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",  
-                        "> control_table: What do you want to do now?",
-                        "  | 0 | initialization |",
-                        "  | 1 | termination    |",
-                        "  | 2 | insertion      |",
-                        "  | 3 | insert_head    |",
-                        "  | 4 | insert_tail    |",
-                        "  | 5 | deletion       |",
-                        "  | 6 | delete_head    |",
-                        "  | 7 | delete_tail    |",
-                        "  | 8 | search         |",
-                        "  | 9 | display        |");
-    scanf("%u", &opcode);
-    getchar();
+    unsigned int index;
 
     switch(opcode)
     {
     case 0:
-        return initialization();
+        return l_initialization();
 
     case 1:
-        termination(node);
+        l_termination(node);
         break;
    
     case 2:
         printf("\n%s", "> control_table: The function needs a index to insert the node to designed location.");
         scanf("%u", &index);
         getchar();
-        insertion(node, index);
+        l_insertion(node, index);
         break;
 
     case 3:
-        insert_head(node);
+        l_insert_head(node);
         break;
     
     case 4:
-        insert_tail(node);
+        l_insert_tail(node);
         break;
 
     case 5:
         printf("\n%s", "> control_table: The function needs a index to delete the node of designed location.");
         scanf("%u", &index);
         getchar();
-        deletion(node, index);
+        l_deletion(node, index);
         break;
     
     case 6:
-        delete_head(node);
+        l_delete_head(node);
         break;
     
     case 7:
-        delete_tail(node);
+        l_delete_tail(node);
         break;
     
     case 8:
         printf("\n%s", "> control_table: The function needs a index to search the designed node.");
         scanf("%u", &index);
         getchar();
-        return search(node, index);
+        return l_search(node, index);
     
     case 9:
-        display(node);
-        break;
-    
-    default:
-        fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
+        l_display(node);
         break;
     }
 
-    return NULL;
+    return;
 }
 
-Node * initialization(void)
+Node * l_initialization(void)
 {
     printf("\n%s", "> Initialization: Allocating the memory space for head node.");
     Node *head = (Node *)calloc(1, sizeof(Node));
@@ -130,7 +136,7 @@ Node * initialization(void)
     return head;
 }
 
-void termination(Node *head)
+void l_termination(Node *head)
 {
 
 }
@@ -145,7 +151,7 @@ static inline void polynomial_insert (Node *node, unsigned int index);
 static inline void doubly_insert     (Node *node, unsigned int index);
 static inline void circular_insert   (Node *node, unsigned int index);
 
-void insertion(Node *node, unsigned int index)
+Node * l_insertion(Node *node, unsigned int index)
 {
     ;
 }
@@ -177,7 +183,7 @@ static inline Node * polynomial_insert_head (Node *node);
 static inline Node * doubly_insert_head     (Node *node);
 static inline Node * circular_insert_head   (Node *node);
 
-void insert_head(Node *node)
+Node * l_insert_head(Node *node)
 {
     switch(node->type)
     {
@@ -240,7 +246,7 @@ static inline void polynomial_insert_tail (Node *node);
 static inline void doubly_insert_tail     (Node *node);
 static inline void circular_insert_tail   (Node *node);
 
-void insert_tail(Node *node)
+void l_insert_tail(Node *node)
 {
     ;
 }
@@ -276,7 +282,7 @@ static inline void polynomial_delete (Node *node, unsigned int index);
 static inline void doubly_delete     (Node *node, unsigned int index);
 static inline void circular_delete   (Node *node, unsigned int index);
 
-void deletion(Node *node, unsigned int index)
+Node * l_deletion(Node *node, unsigned int index)
 {
     ;
 }
@@ -308,7 +314,7 @@ static inline void polynomial_delete_head (Node *node);
 static inline void doubly_delete_head     (Node *node);
 static inline void circular_delete_head   (Node *node);
 
-void delete_head(Node *node)
+Node * l_delete_head(Node *node)
 {
     ;
 }
@@ -340,7 +346,7 @@ static inline void polynomial_delete_tail (Node *node);
 static inline void doubly_delete_tail     (Node *node);
 static inline void circular_delete_tail   (Node *node);
 
-void delete_tail(Node *node)
+void l_delete_tail(Node *node)
 {
     ;
 }
@@ -376,7 +382,7 @@ static inline int polynomial_search (Node *node, unsigned int index);
 static inline int doubly_search     (Node *node, unsigned int index);
 static inline int circular_search   (Node *node, unsigned int index);
 
-Node * search(Node *node, unsigned int index)
+Node * l_search(Node *node, unsigned int index)
 {
     ;
 }
@@ -407,7 +413,7 @@ static inline void singly_display     (Node *node);
 static inline void polynomial_display (Node *node);
 static inline void circular_display   (Node *node);
 
-void display(Node *node)
+void l_display(Node *node)
 {
     if(node->type >= LIST_TYPE_SIZE)
     {

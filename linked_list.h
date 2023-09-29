@@ -89,22 +89,22 @@ struct Node
 };
 
 //Function prototype for operation of linked list:
-void   l_control_table   (Node **);
+void   l_control_table   (Node **, unsigned int);
 Node * l_initialization  (void);
 void   l_termination     (Node *);
 
 Node * l_construction    (Node *);
-Node * l_insertion       (Node *);
+Node * l_insertion       (Node *, unsigned int);
 Node * l_insert_head     (Node *);
 void   l_insert_tail     (Node *);
 
 void   l_destruction     (Node *);
-Node * l_deletion        (Node *);
+Node * l_deletion        (Node *, unsigned int);
 Node * l_delete_head     (Node *);
 void   l_delete_tail     (Node *);
 
 //Useful operation and algorithm based on divergent linked list type.
-Node * l_search          (Node *);
+Node * l_search          (Node *, unsigned int);
 void   l_display         (Node *);
 Node * l_sort            (Node *);
 Node * l_reverse         (Node *);
