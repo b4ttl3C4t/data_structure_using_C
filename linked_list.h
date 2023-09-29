@@ -92,7 +92,7 @@ struct Node
 void   l_control_table   (Node **, unsigned int);
 Node * l_initialization  (void);
 void   l_termination     (Node *);
-
+/*
 Node * l_construction    (Node *);
 Node * l_insertion       (Node *, unsigned int);
 Node * l_insert_head     (Node *);
@@ -114,4 +114,4 @@ bool   l_is_list_empty   (Node *);
 void   polynomial_addition          (Node *, Node *);
 void   polynomial_subtraction       (Node *, Node *);
 void   polynomial_multiplication    (Node *, Node *);
-void   polynomial_division          (Node *, Node *);
+void   polynomial_division          (Node *, Node *);*/

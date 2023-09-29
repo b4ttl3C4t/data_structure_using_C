@@ -11,37 +11,38 @@ int main(void)
 
     while(1)
     { 
-        pritnf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",  
-                            "> control_table: What do you want to do now?",
-                            "  | 0 | initialization |",
-                            "  | 1 | termination    |",
-                            "  | 2 | insertion      |",
-                            "  | 3 | insert_head    |",
-                            "  | 4 | insert_tail    |",
-                            "  | 5 | deletion       |",
-                            "  | 6 | delete_head    |",
-                            "  | 7 | delete_tail    |",
-                            "  | 8 | search         |",
-                            "  | 9 | display        |",
-                            "  |  other  |   EXIT   |");
+        printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+                            "> control_table: ",
+                            "  |code|    function    |",
+                            "  |  0 | initialization |",
+                            "  |  1 | termination    |",
+                            "  |  2 | construction   |",
+                            "  |  3 | insertion      |",
+                            "  |  4 | insert_head    |",
+                            "  |  5 | insert_tail    |",
+                            "  |  6 | destruction    |",
+                            "  |  7 | deletion       |",
+                            "  |  8 | delete_head    |",
+                            "  |  9 | delete_tail    |",
+                            "  | 10 | search         |",
+                            "  | 11 | display        |",
+                            "  | 12 | sort           |",
+                            "  | 13 | reverse        |",
+                            "  | 14 | is_list_empty  |",
+                            "  |  other  |    EXIT   |",
+                            "> control_table: What do you want to do now? Please enter the opcode:");
         scanf("%u", &opcode);
         getchar();
 
-        if(opcode > 9)
+        if(opcode > 14)
         {
             fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
-            return 1;
+            return 0;
         }
         
-        control_table(&head, opcode);
+        l_control_table(&head, opcode);
     }
-    
-    return 0;
 }
-
-
-
-
 
 void l_control_table(Node **node, unsigned int opcode)
 {
@@ -50,55 +51,17 @@ void l_control_table(Node **node, unsigned int opcode)
     switch(opcode)
     {
     case 0:
-        return l_initialization();
+        *node = l_initialization();
 
     case 1:
-        l_termination(node);
-        break;
-   
-    case 2:
-        printf("\n%s", "> control_table: The function needs a index to insert the node to designed location.");
-        scanf("%u", &index);
-        getchar();
-        l_insertion(node, index);
-        break;
-
-    case 3:
-        l_insert_head(node);
-        break;
-    
-    case 4:
-        l_insert_tail(node);
-        break;
-
-    case 5:
-        printf("\n%s", "> control_table: The function needs a index to delete the node of designed location.");
-        scanf("%u", &index);
-        getchar();
-        l_deletion(node, index);
-        break;
-    
-    case 6:
-        l_delete_head(node);
-        break;
-    
-    case 7:
-        l_delete_tail(node);
-        break;
-    
-    case 8:
-        printf("\n%s", "> control_table: The function needs a index to search the designed node.");
-        scanf("%u", &index);
-        getchar();
-        return l_search(node, index);
-    
-    case 9:
-        l_display(node);
+        l_termination(*node);
         break;
     }
 
     return;
 }
+
+static void input_data(Node *node);
 
 Node * l_initialization(void)
 {
@@ -140,42 +103,6 @@ void l_termination(Node *head)
 {
 
 }
-
-
-
-
-
-/*----------------------------------------function *insertion*      begin----------------------------------------*/
-static inline void singly_insert     (Node *node, unsigned int index);
-static inline void polynomial_insert (Node *node, unsigned int index);
-static inline void doubly_insert     (Node *node, unsigned int index);
-static inline void circular_insert   (Node *node, unsigned int index);
-
-Node * l_insertion(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void singly_insert(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void polynomial_insert(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void doubly_insert(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void circular_insert(Node *node, unsigned int index)
-{
-    ;
-}
-/*----------------------------------------function *insertion*      end  ----------------------------------------*/
 
 /*----------------------------------------function *insert_head*    begin----------------------------------------*/
 static inline Node * singly_insert_head     (Node *node);
@@ -239,174 +166,6 @@ static inline Node * circular_insert_head(Node *node)
     ;
 }
 /*----------------------------------------function *insert_head*    end  ----------------------------------------*/
-
-/*----------------------------------------function *insert_tail*    begin----------------------------------------*/
-static inline void singly_insert_tail     (Node *node);
-static inline void polynomial_insert_tail (Node *node);
-static inline void doubly_insert_tail     (Node *node);
-static inline void circular_insert_tail   (Node *node);
-
-void l_insert_tail(Node *node)
-{
-    ;
-}
-
-static inline void singly_insert_tail(Node *node)
-{
-    ;
-}
-
-static inline void polynomial_insert_tail(Node *node)
-{
-    ;
-}
-
-static inline void doubly_insert_tail(Node *node)
-{
-    ;
-}
-
-static inline void circular_insert_tail(Node *node)
-{
-    ;
-}
-/*----------------------------------------function *insert_tail*    end  ----------------------------------------*/
-
-
-
-
-
-/*----------------------------------------function *deletion*       begin----------------------------------------*/
-static inline void singly_delete     (Node *node, unsigned int index);
-static inline void polynomial_delete (Node *node, unsigned int index);
-static inline void doubly_delete     (Node *node, unsigned int index);
-static inline void circular_delete   (Node *node, unsigned int index);
-
-Node * l_deletion(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void singly_delete(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void polynomial_delete(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void doubly_delete(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline void circular_delete(Node *node, unsigned int index)
-{
-    ;
-}
-/*----------------------------------------function *deletion*       end  ----------------------------------------*/
-
-/*----------------------------------------function *delete_head*    begin----------------------------------------*/
-static inline void singly_delete_head     (Node *node);
-static inline void polynomial_delete_head (Node *node);
-static inline void doubly_delete_head     (Node *node);
-static inline void circular_delete_head   (Node *node);
-
-Node * l_delete_head(Node *node)
-{
-    ;
-}
-
-static inline void singly_delete_head(Node *node)
-{
-    ;
-}
-
-static inline void polynomial_delete_head(Node *node)
-{
-    ;
-}
-
-static inline void doubly_delete_head(Node *node)
-{
-    ;
-}
-
-static inline void circular_delete_head(Node *node)
-{
-    ;
-}
-/*----------------------------------------function *delete_head*    end  ----------------------------------------*/
-
-/*----------------------------------------function *delete_tail*    begin----------------------------------------*/
-static inline void singly_delete_tail     (Node *node);
-static inline void polynomial_delete_tail (Node *node);
-static inline void doubly_delete_tail     (Node *node);
-static inline void circular_delete_tail   (Node *node);
-
-void l_delete_tail(Node *node)
-{
-    ;
-}
-
-static inline void singly_delete_tail(Node *node)
-{
-    ;
-}
-
-static inline void polynomial_delete_tail(Node *node)
-{
-    ;
-}
-
-static inline void doubly_delete_tail(Node *node)
-{
-    ;
-}
-
-static inline void circular_delete_tail(Node *node)
-{
-    ;
-}
-/*----------------------------------------function *delete_tail*    end  ----------------------------------------*/
-
-
-
-
-
-/*----------------------------------------function *search*         begin----------------------------------------*/
-static inline int singly_search     (Node *node, unsigned int index);
-static inline int polynomial_search (Node *node, unsigned int index);
-static inline int doubly_search     (Node *node, unsigned int index);
-static inline int circular_search   (Node *node, unsigned int index);
-
-Node * l_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int singly_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int polynomial_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int doubly_search(Node *node, unsigned int index)
-{
-    ;
-}
-
-static inline int circular_search(Node *node, unsigned int index)
-{
-    ;
-}
-/*----------------------------------------function *search*         end  ----------------------------------------*/
 
 /*----------------------------------------function *display*        begin----------------------------------------*/
 static inline void singly_display     (Node *node);
@@ -498,7 +257,7 @@ static inline void circular_display(Node *node)
 /*----------------------------------------function *display*        end  ----------------------------------------*/
 
 /*----------------------------------------function *input_data*     begin----------------------------------------*/
-static inline void singly_input_data     (Node *node);
+inline void singly_input_data     (Node *node);
 static inline void polynomial_input_data (Node *node);
 
 static void input_data(Node *node)
@@ -528,7 +287,7 @@ static void input_data(Node *node)
  *by function *singly_input_data*
  *you still have to set the *type* mode (like 0, 2, 3) of the node.
  */
-static inline void singly_input_data(Node *node)
+inline void singly_input_data(Node *node)
 {
     printf("\n%s", "> input_data: Please set the data for the head node:");
     scanf("%d", &node->singly.data);
