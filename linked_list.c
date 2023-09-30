@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include "linked_list.h"
 
 int main(void)
 {
     Node *head;
-
-    unsigned int opcode;
+    uint64_t opcode;
 
     while(1)
     { 
@@ -29,24 +29,29 @@ int main(void)
                             "  | 12 | sort           |",
                             "  | 13 | reverse        |",
                             "  | 14 | is_list_empty  |",
-                            "  |  other  |    EXIT   |",
+                            "  | 15 |      EXIT      |",
                             "> control_table: What do you want to do now? Please enter the opcode:");
-        scanf("%u", &opcode);
+        scanf("%llu", &opcode);
         getchar();
 
-        if(opcode > 14)
+        if(opcode == 15)
+        {
+            printf("\n%s", "> control_table: Quitting the process of the linked list types");
+            return 0;
+        }
+
+        if(opcode > 15)
         {
             fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
-            return 0;
         }
         
         l_control_table(&head, opcode);
     }
 }
 
-void l_control_table(Node **node, unsigned int opcode)
+void l_control_table(Node **node, uint64_t opcode)
 {
-    unsigned int index;
+    uint64_t index;
 
     switch(opcode)
     {
@@ -55,6 +60,10 @@ void l_control_table(Node **node, unsigned int opcode)
 
     case 1:
         l_termination(*node);
+        break;
+
+    case 11:
+        l_display(*node);
         break;
     }
 
@@ -84,7 +93,7 @@ Node * l_initialization(void)
     
     //Interface for setting mode.
     printf("\n%s", "> Initialization: Please set the type mode for the head node:");
-    scanf("%u", &head->type);
+    scanf("%llu", &head->type);
     getchar();
     
     //Probing whether the type mode is correct.
@@ -95,6 +104,9 @@ Node * l_initialization(void)
     }
 
     input_data(head);
+    //Initializate linkage for head node.
+    head->circular.next = NULL;
+    head->circular.prev = NULL;
 
     return head;
 }
@@ -115,20 +127,16 @@ Node * l_insert_head(Node *node)
     switch(node->type)
     {
     case 0:
-        singly_insert_head(node);
-        break;
+        return singly_insert_head(node);
 
     case 1:
-        polynomial_insert_head(node);
-        break;
+        return polynomial_insert_head(node);
 
     case 2:
-        doubly_insert_head(node);
-        break;
+        return doubly_insert_head(node);
 
     case 3:
-        circular_insert_head(node);
-        break;
+        return circular_insert_head(node);
     }
 }
 
@@ -140,15 +148,15 @@ static inline Node * singly_insert_head(Node *node)
     if(head == NULL)
     {
         fprintf(stderr, "%s\n", MALLOC_ERROR);
-        return ;
+        return NULL;
     }
 
     //Setting the type and input data.
-    head->type = node->type;
-    singly_input_data(head);
+    head->type = singly;
+    input_data(head);
     head->singly.next = node;
 
-    node = head;
+    return head;
 }
 
 static inline Node * polynomial_insert_head(Node *node)
@@ -174,12 +182,8 @@ static inline void circular_display   (Node *node);
 
 void l_display(Node *node)
 {
-    if(node->type >= LIST_TYPE_SIZE)
-    {
-        printf("%s", "It's not a booked type.");
-        return ;
-    }
-    
+    printf("\n%s", "> display: The data is as following:");
+
     switch(node->type)
     {
     case 0:
@@ -205,7 +209,6 @@ void l_display(Node *node)
 
     //Resetting the sentinel node by NULL (or nil).
     sentinel_node = NULL;
-    puts("");
 }
 
 static inline void singly_display(Node *node)
@@ -214,11 +217,20 @@ static inline void singly_display(Node *node)
  */
 {
     sentinel_node = NULL;
-    do
+
+    while(1)
     {
         printf("%lld ", node->singly.data);
         node = node->singly.next;
-    } while (node != NULL);
+
+        if(node == NULL)
+        {
+            printf("%s", " -> NULL");
+            break;
+        }
+        
+        printf("%s", " -> ");
+    }
 }
 
 static inline void polynomial_display(Node *node)
@@ -227,12 +239,13 @@ static inline void polynomial_display(Node *node)
  */
 {
     sentinel_node = NULL;
+
     while(1)
     {
-        printf("%lfx^%u", node->polynomial.coefficient, node->polynomial.power);
+        printf("%lfx^%llu", node->polynomial.coefficient, node->polynomial.power);
         node = node->polynomial.next;
 
-        if(node != NULL)
+        if(node == NULL)
             break;
         
         printf("%s", " + ");
@@ -248,16 +261,24 @@ static inline void circular_display(Node *node)
      *(Don't forget that it is a *circular* linked list.)
      */
 
-    do
+    while(1)
     {
         printf("%lld ", node->circular.data);
         node = node->circular.next;
-    } while (node != sentinel_node);
+
+        if(node == sentinel_node)
+        {
+            printf("%s", " -> head");
+            break;
+        }
+        
+        printf("%s", " -> ");
+    }
 }
 /*----------------------------------------function *display*        end  ----------------------------------------*/
 
 /*----------------------------------------function *input_data*     begin----------------------------------------*/
-inline void singly_input_data     (Node *node);
+static inline void singly_input_data     (Node *node);
 static inline void polynomial_input_data (Node *node);
 
 static void input_data(Node *node)
@@ -287,17 +308,21 @@ static void input_data(Node *node)
  *by function *singly_input_data*
  *you still have to set the *type* mode (like 0, 2, 3) of the node.
  */
-inline void singly_input_data(Node *node)
+static inline void singly_input_data(Node *node)
 {
     printf("\n%s", "> input_data: Please set the data for the head node:");
-    scanf("%d", &node->singly.data);
+    scanf("%lld", &node->singly.data);
     getchar();
 }
 
 static inline void polynomial_input_data(Node *node)
 {
-    printf("\n%s", "> input_data: Please set the data for the head node (polynomial):");
-    scanf("%lf%u", &node->polynomial.coefficient, &node->polynomial.power);
+    printf("\n%s", "> input_data: Please set the coefficient for the head node (polynomial):");
+    scanf("%lf", &node->polynomial.coefficient);
+    getchar();
+
+    printf("\n%s", "> input_data: Please set the power for the head node (polynomial):");
+    scanf("%llu", &node->polynomial.power);
     getchar();
 }
 /*----------------------------------------function *input_data*     end  ----------------------------------------*/

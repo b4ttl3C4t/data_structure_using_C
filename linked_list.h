@@ -32,8 +32,8 @@ enum LinkedListType
  */
 struct SinglyLinkedList
 {
-    signed long long int data;
-    signed long long int :0;
+    int64_t data;
+    int64_t :0;
     Node *next;
 };
 
@@ -42,8 +42,8 @@ struct SinglyLinkedList
  */
 struct PolynomialLinkedList
 {
-    unsigned long long int power;
     double coefficient;
+    uint64_t power;
     Node *next;
 };
 
@@ -52,8 +52,8 @@ struct PolynomialLinkedList
  */
 struct DoublyLinkedList
 {
-    signed long long int data;
-    signed long long int :0;
+    int64_t data;
+    int64_t :0;
     Node *next;
     Node *prev;
 };
@@ -63,8 +63,8 @@ struct DoublyLinkedList
  */
 struct CircularLinkedList
 {
-    signed long long int data;
-    signed long long int :0;
+    int64_t data;
+    int64_t :0;
     Node *next;
     Node *prev;
 };
@@ -89,27 +89,27 @@ struct Node
 };
 
 //Function prototype for operation of linked list:
-void   l_control_table   (Node **, unsigned int);
+void   l_control_table   (Node **, uint64_t);
 Node * l_initialization  (void);
 void   l_termination     (Node *);
-/*
-Node * l_construction    (Node *);
-Node * l_insertion       (Node *, unsigned int);
-Node * l_insert_head     (Node *);
-void   l_insert_tail     (Node *);
 
-void   l_destruction     (Node *);
-Node * l_deletion        (Node *, unsigned int);
-Node * l_delete_head     (Node *);
-void   l_delete_tail     (Node *);
+//Node * l_construction    (Node *);
+//Node * l_insertion       (Node *, uint64_t);
+//Node * l_insert_head     (Node *);
+//void   l_insert_tail     (Node *);
+
+//void   l_destruction     (Node *);
+//Node * l_deletion        (Node *, uint64_t);
+//Node * l_delete_head     (Node *);
+//void   l_delete_tail     (Node *);
 
 //Useful operation and algorithm based on divergent linked list type.
-Node * l_search          (Node *, unsigned int);
+//Node * l_search          (Node *, uint64_t);
 void   l_display         (Node *);
-Node * l_sort            (Node *);
-Node * l_reverse         (Node *);
-bool   l_is_list_empty   (Node *);
-
+//Node * l_sort            (Node *);
+//Node * l_reverse         (Node *);
+//bool   l_is_list_empty   (Node *);
+/*
 //The following algorithm is only for polynomial linked list.
 void   polynomial_addition          (Node *, Node *);
 void   polynomial_subtraction       (Node *, Node *);
