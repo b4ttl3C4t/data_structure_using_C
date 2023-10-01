@@ -36,7 +36,7 @@ int main(void)
 
         if(opcode == 15)
         {
-            printf("\n%s", "> control_table: Quitting the process of the linked list types");
+            printf("\n%s", "> control_table: Quitting the process for linked list");
             return 0;
         }
 
@@ -44,7 +44,7 @@ int main(void)
         {
             fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
         }
-        
+
         l_control_table(&head, opcode);
     }
 }
@@ -117,41 +117,40 @@ void l_termination(Node *head)
 }
 
 /*----------------------------------------function *insert_head*    begin----------------------------------------*/
-static inline Node * singly_insert_head     (Node *node);
-static inline Node * polynomial_insert_head (Node *node);
-static inline Node * doubly_insert_head     (Node *node);
-static inline Node * circular_insert_head   (Node *node);
+static inline Node * singly_insert_head     (Node *head, Node *node);
+static inline Node * polynomial_insert_head (Node *head, Node *node);
+static inline Node * doubly_insert_head     (Node *head, Node *node);
+static inline Node * circular_insert_head   (Node *head, Node *node);
 
 Node * l_insert_head(Node *node)
-{
-    switch(node->type)
-    {
-    case 0:
-        return singly_insert_head(node);
-
-    case 1:
-        return polynomial_insert_head(node);
-
-    case 2:
-        return doubly_insert_head(node);
-
-    case 3:
-        return circular_insert_head(node);
-    }
-}
-
-static inline Node * singly_insert_head(Node *node)
 {
     static Node *head = NULL;
     head = (Node *)malloc(sizeof(Node));
     
     if(head == NULL)
     {
-        fprintf(stderr, "%s\n", MALLOC_ERROR);
+        fprintf(stderr, "\n> insert_head: %s", MALLOC_ERROR);
         return NULL;
     }
 
-    //Setting the type and input data.
+    switch(node->type)
+    {
+    case 0:
+        return singly_insert_head(head, node);
+
+    case 1:
+        return polynomial_insert_head(head, node);
+
+    case 2:
+        return doubly_insert_head(head, node);
+
+    case 3:
+        return circular_insert_head(head, node);
+    }
+}
+
+static inline Node * singly_insert_head(Node *head, Node *node)
+{
     head->type = singly;
     input_data(head);
     head->singly.next = node;
@@ -159,19 +158,31 @@ static inline Node * singly_insert_head(Node *node)
     return head;
 }
 
-static inline Node * polynomial_insert_head(Node *node)
+static inline Node * polynomial_insert_head(Node *head, Node *node)
 {
-    ;
+    head->type = polynomial;
+    input_data(head);
+    head->singly.next = node;
+
+    return head;
 }
 
-static inline Node * doubly_insert_head(Node *node)
+static inline Node * doubly_insert_head(Node *head, Node *node)
 {
-    ;
+    head->type = doubly;
+    input_data(head);
+    //head->singly.next = node;
+
+    return head;
 }
 
-static inline Node * circular_insert_head(Node *node)
+static inline Node * circular_insert_head(Node *head, Node *node)
 {
-    ;
+    head->type = circular;
+    input_data(head);
+    //head->singly.next = node;
+
+    return head;
 }
 /*----------------------------------------function *insert_head*    end  ----------------------------------------*/
 

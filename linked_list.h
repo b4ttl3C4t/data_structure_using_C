@@ -14,12 +14,12 @@ struct Node;
 typedef struct Node Node;
 
 //The *sentinel node* means the end of a linked list.
-Node *sentinel_node;
+static Node *sentinel_node;
 
 /*You should set the mode for the newer node (as following)
  *whenever you construst it.
  */
-enum LinkedListType
+static enum LinkedListType
 {
     singly      = 0,
     polynomial  = 1,
@@ -30,7 +30,7 @@ enum LinkedListType
 /*The definition of singly listed list .
  *(The data is set by type *int* .)
  */
-struct SinglyLinkedList
+static struct SinglyLinkedList
 {
     int64_t data;
     int64_t :0;
@@ -40,7 +40,7 @@ struct SinglyLinkedList
 /*The definition of singly listed list .
  *(The data is set by type *int* .)
  */
-struct PolynomialLinkedList
+static struct PolynomialLinkedList
 {
     double coefficient;
     uint64_t power;
@@ -50,7 +50,7 @@ struct PolynomialLinkedList
 /*The definition of doubly listed list.
  *(The data is set by type *int* .)
  */
-struct DoublyLinkedList
+static struct DoublyLinkedList
 {
     int64_t data;
     int64_t :0;
@@ -61,7 +61,7 @@ struct DoublyLinkedList
 /*The definition of circular listed list definition.
  *(The data is set by type *int* .)
  */
-struct CircularLinkedList
+static struct CircularLinkedList
 {
     int64_t data;
     int64_t :0;
@@ -75,7 +75,7 @@ struct CircularLinkedList
  */
 
 //Constructing compound linked list type, then setting the mode by variable *type* .
-struct Node
+static struct Node
 {
     enum LinkedListType type;
     
