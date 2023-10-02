@@ -9,12 +9,12 @@ struct SinglyLinkedList;
 struct PolynomialLinkedList;
 struct DoublyLinkedList;
 struct CircularLinkedList;
-struct Node;
+struct l_Node;
 
-typedef struct Node Node;
+typedef struct l_Node l_Node;
 
 //The *sentinel node* means the end of a linked list.
-static Node *sentinel_node;
+static l_Node *sentinel_node;
 
 /*You should set the mode for the newer node (as following)
  *whenever you construst it.
@@ -34,7 +34,7 @@ static struct SinglyLinkedList
 {
     int64_t data;
     int64_t :0;
-    Node *next;
+    l_Node *next;
 };
 
 /*The definition of singly listed list .
@@ -44,7 +44,7 @@ static struct PolynomialLinkedList
 {
     double coefficient;
     uint64_t power;
-    Node *next;
+    l_Node *next;
 };
 
 /*The definition of doubly listed list.
@@ -54,8 +54,8 @@ static struct DoublyLinkedList
 {
     int64_t data;
     int64_t :0;
-    Node *next;
-    Node *prev;
+    l_Node *next;
+    l_Node *prev;
 };
 
 /*The definition of circular listed list definition.
@@ -65,8 +65,8 @@ static struct CircularLinkedList
 {
     int64_t data;
     int64_t :0;
-    Node *next;
-    Node *prev;
+    l_Node *next;
+    l_Node *prev;
 };
 /*The circular_linked_list is as singly_linked_list or doubly_linked_list,
  *but there is no NULL to be linked, instead of 
@@ -75,7 +75,7 @@ static struct CircularLinkedList
  */
 
 //Constructing compound linked list type, then setting the mode by variable *type* .
-static struct Node
+struct l_Node
 {
     enum LinkedListType type;
     
@@ -89,29 +89,28 @@ static struct Node
 };
 
 //Function prototype for operation of linked list:
-void   l_control_table   (Node **, uint64_t);
-Node * l_initialization  (void);
-void   l_termination     (Node *);
+void     l_control_table    (l_Node **, uint64_t);
+l_Node * l_initialization   (void);
 
-//Node * l_construction    (Node *);
-//Node * l_insertion       (Node *, uint64_t);
-//Node * l_insert_head     (Node *);
-//void   l_insert_tail     (Node *);
+//l_Node * l_construction     (l_Node *);
+//l_Node * l_insertion        (l_Node *, uint64_t);
+l_Node * l_insert_head      (l_Node *);
+//void     l_insert_tail      (l_Node *);
 
-//void   l_destruction     (Node *);
-//Node * l_deletion        (Node *, uint64_t);
-//Node * l_delete_head     (Node *);
-//void   l_delete_tail     (Node *);
+//void     l_destruction      (l_Node *);
+//l_Node * l_deletion         (l_Node *, uint64_t);
+//l_Node * l_delete_head      (l_Node *);
+//void     l_delete_tail      (l_Node *);
 
 //Useful operation and algorithm based on divergent linked list type.
-//Node * l_search          (Node *, uint64_t);
-void   l_display         (Node *);
-//Node * l_sort            (Node *);
-//Node * l_reverse         (Node *);
-//bool   l_is_list_empty   (Node *);
+//l_Node * l_search           (l_Node *, uint64_t);
+void     l_display          (l_Node *);
+//l_Node * l_sort             (l_Node *);
+//l_Node * l_reverse          (l_Node *);
+//bool     l_is_list_empty    (l_Node *);
 /*
 //The following algorithm is only for polynomial linked list.
-void   polynomial_addition          (Node *, Node *);
-void   polynomial_subtraction       (Node *, Node *);
-void   polynomial_multiplication    (Node *, Node *);
-void   polynomial_division          (Node *, Node *);*/
+void   polynomial_addition          (l_Node *, l_Node *);
+void   polynomial_subtraction       (l_Node *, l_Node *);
+void   polynomial_multiplication    (l_Node *, l_Node *);
+void   polynomial_division          (l_Node *, l_Node *);*/
