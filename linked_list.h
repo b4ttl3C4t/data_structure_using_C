@@ -99,7 +99,7 @@ l_Node * l_insert_head      (l_Node *);
 
 //void     l_destruction      (l_Node *);
 //l_Node * l_deletion         (l_Node *, uint64_t);
-//l_Node * l_delete_head      (l_Node *);
+l_Node * l_delete_head      (l_Node *);
 //void     l_delete_tail      (l_Node *);
 
 //Useful operation and algorithm based on divergent linked list type.

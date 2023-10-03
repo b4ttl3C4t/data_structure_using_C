@@ -62,6 +62,10 @@ void l_control_table(l_Node **node, uint64_t opcode)
         *node = l_insert_head(*node);
         break;
 
+    case 7:
+        *node = l_delete_head(*node);
+        break;
+
     case 10:
         l_display(*node);
         break;
@@ -194,6 +198,71 @@ static inline l_Node * circular_insert_head(l_Node *head, l_Node *node)
 }
 /*----------------------------------------function *l_insert_head*    end  ----------------------------------------*/
 
+/*----------------------------------------function *l_delete_head*    begin----------------------------------------*/
+static inline l_Node * doubly_delete_head     (l_Node *node);
+static inline l_Node * circular_delete_head   (l_Node *node);
+
+l_Node * l_delete_head(l_Node *node)
+{
+    switch(node->type)
+    {
+    case 0:
+        return doubly_delete_head(node);
+
+    case 1:
+        return doubly_delete_head(node);
+
+    case 2:
+        return doubly_delete_head(node);
+
+    case 3:
+        return circular_delete_head(node);
+    }
+}
+
+static inline l_Node * doubly_delete_head(l_Node *node)
+{
+    sentinel_node = NULL;
+
+    //Probing if the head node is the only one node.
+    if(node->doubly.next == sentinel_node)
+    {
+        free(node);
+        printf("\n%s", "> delete_head: The linked list is empty now.");
+        return NULL;
+    }
+
+    static l_Node * next;
+    node->doubly.next->doubly.prev = NULL;
+    next = node->doubly.next;
+    free(node);
+
+    return next;
+}
+
+static inline l_Node * circular_delete_head(l_Node *node)
+{
+    sentinel_node = node;
+
+    //Probing if the head node is the only one node.
+    if(node->doubly.next == sentinel_node)
+    {
+        free(node);
+        printf("\n%s", "> delete_head: The linked list is empty now.");
+        return NULL;
+    }
+
+    static l_Node * next;
+    node->circular.next->circular.prev = node->circular.prev;
+    node->circular.prev->circular.next = node->circular.next;
+    next = node->circular.next;
+    free(node);
+
+    return next;
+}
+
+/*----------------------------------------function *l_delete_head*    end  ----------------------------------------*/
+
 /*----------------------------------------function *l_display*        begin----------------------------------------*/
 static inline void singly_display     (l_Node *node);
 static inline void polynomial_display (l_Node *node);
@@ -225,9 +294,6 @@ void l_display(l_Node *node)
         circular_display(node);
         break;
     }
-
-    //Resetting the sentinel node by NULL (or nil).
-    sentinel_node = NULL;
 }
 
 static inline void singly_display(l_Node *node)
