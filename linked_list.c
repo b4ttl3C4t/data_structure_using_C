@@ -75,7 +75,8 @@ void l_control_table(l_Node **node, uint64_t opcode)
 }
 
 static void input_data  (l_Node *node);
-static void l_swap      (l_Node *X, l_Node *Y);
+static void swap        (l_Node *X, l_Node *Y);
+static void find_tail   (l_Node *node);
 
 /*----------------------------------------function *l_initialization*  begin----------------------------------------*/
 l_Node * l_initialization(void)
@@ -245,7 +246,7 @@ static inline l_Node * circular_delete_head(l_Node *node)
     sentinel_node = node;
 
     //Probing if the head node is the only one node.
-    if(node->doubly.next == sentinel_node)
+    if(node->circular.next == sentinel_node)
     {
         free(node);
         printf("\n%s", "> delete_head: The linked list is empty now.");
@@ -262,6 +263,47 @@ static inline l_Node * circular_delete_head(l_Node *node)
 }
 
 /*----------------------------------------function *l_delete_head*    end  ----------------------------------------*/
+
+/*----------------------------------------function *l_delete_tail*    begin----------------------------------------*/
+static inline void doubly_delete_tail     (l_Node *node);
+static inline void circular_delete_tail   (l_Node *node);
+
+void l_delete_tail(l_Node *node)
+{
+    switch(node->type)
+    {
+    case 0:
+        return doubly_delete_tail(node);
+
+    case 1:
+        return doubly_delete_tail(node);
+
+    case 2:
+        return doubly_delete_tail(node);
+
+    case 3:
+        return circular_delete_tail(node);
+    }
+}
+
+static inline void doubly_delete_tail(l_Node *node)
+{
+    sentinel_node = NULL;
+
+    if(node->doubly.next == sentinel_node)
+    {
+
+    }
+
+    
+}
+
+static inline void circular_delete_tail(l_Node *node)
+{
+    sentinel_node = node;
+}
+
+/*----------------------------------------function *l_delete_tail*    end  ----------------------------------------*/
 
 /*----------------------------------------function *l_display*        begin----------------------------------------*/
 static inline void singly_display     (l_Node *node);
@@ -283,10 +325,6 @@ void l_display(l_Node *node)
         break;
 
     case 2:
-        /*There is no difference between singly and doubly linked list
-         *when navigating through both the linked list type,
-         *so you can use the same function on it.
-         */
         singly_display(node);
         break;
 
@@ -297,8 +335,9 @@ void l_display(l_Node *node)
 }
 
 static inline void singly_display(l_Node *node)
-/*Both singly linked list and doubly linked list could be displayed step by step,
- *not having to care the minute difference between them in most of the time.
+/*There is no difference between singly and doubly linked list
+ *when navigating through both the linked list type,
+ *so you can use the same function on it.
  */
 {
     sentinel_node = NULL;
@@ -337,13 +376,13 @@ static inline void polynomial_display(l_Node *node)
 }
 
 static inline void circular_display(l_Node *node)
+/*The node means some node you want to begin with,
+ *and the function could traverse all the node until
+ *meeting with the beginning node again.
+ *(Don't forget that it is a *circular* linked list.)
+ */
 {
     sentinel_node = node;
-    /*The node means some node you want to begin with,
-     *and the function could traverse all the node until
-     *meeting with the beginning node again.
-     *(Don't forget that it is a *circular* linked list.)
-     */
 
     while(1)
     {
@@ -409,3 +448,63 @@ static inline void polynomial_input_data(l_Node *node)
     getchar();
 }
 /*----------------------------------------function *input_data*     end  ----------------------------------------*/
+
+/*----------------------------------------function *swap*           begin----------------------------------------*/
+static inline void swap(l_Node *X, l_Node *Y)
+/*While you exchange the data between the two circular linked list nodes,
+ *the behavior will cover the other linked list type,
+ *namely, you can swap nodes with all kind of linked list types by calling this function.
+ */
+{
+    static double floating_temp;
+    static int    integer_temp;
+
+    floating_temp             = X->polynomial.coefficient;
+    X->polynomial.coefficient = Y->polynomial.coefficient;
+    Y->polynomial.coefficient = floating_temp;
+
+    integer_temp        = X->polynomial.power;
+    X->polynomial.power = Y->polynomial.power;
+    Y->polynomial.power = integer_temp;
+}
+/*----------------------------------------function *swap*           end  ----------------------------------------*/
+
+/*----------------------------------------function *find_tail*      begin----------------------------------------*/
+static inline l_Node * singly_find_tail     (l_Node *node);
+static inline l_Node * circular_find_tail   (l_Node *node);
+
+static l_Node * find_tail(l_Node *node)
+{
+    switch(node->type)
+    {
+    case 0:
+        return singly_find_tail(node);
+
+    case 1:
+        return singly_find_tail(node);
+
+    case 2:
+        return singly_find_tail(node);
+
+    case 3:
+        return circular_find_tail(node);
+    }
+}
+
+static inline l_Node * singly_find_tail(l_Node *node)
+{
+    sentinel_node = NULL;
+
+    do
+    {
+        node = node->singly.next;
+    } while(node->singly.next != NULL);
+
+    return node;
+}
+
+static inline l_Node * circular_find_tail(l_Node *node)
+{
+    return node->circular.next;
+}
+/*----------------------------------------function *find_tail*      end  ----------------------------------------*/
