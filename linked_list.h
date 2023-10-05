@@ -1,92 +1,43 @@
-#define LIST_SIZE 50
-#define LIST_TYPE_SIZE 4
-#define MALLOC_ERROR    "The memory allocation for linked list aborts."
-#define MODE_ERROR      "The mode is not accessible."
-#define OPCODE_ERROR    "The opcode is not accessible."
-#define INDEX_ERROR     "The node does not exist."
-
-struct SinglyLinkedList;
-struct PolynomialLinkedList;
-struct DoublyLinkedList;
-struct CircularLinkedList;
-struct l_Node;
-
-typedef struct l_Node l_Node;
-
-//The *sentinel node* means the end of a linked list.
-static l_Node *sentinel_node;
+#ifdef LINKED_LIST_H
 
 /*You should set the mode for the newer node (as following)
  *whenever you construst it.
  */
 static enum LinkedListType
 {
-    singly      = 0,
+    normal      = 0,
     polynomial  = 1,
-    doubly      = 2,
-    circular    = 3,
 };
 
-/*The definition of singly listed list .
- *(The data is set by type *int* .)
- */
-static struct SinglyLinkedList
-{
-    int64_t data;
-    int64_t :0;
-    l_Node *next;
-};
-
-/*The definition of singly listed list .
- *(The data is set by type *int* .)
- */
-static struct PolynomialLinkedList
+//The definition of data for polynomials.
+static struct polynomial_data
 {
     double coefficient;
     uint64_t power;
-    l_Node *next;
 };
 
-/*The definition of doubly listed list.
- *(The data is set by type *int* .)
- */
-static struct DoublyLinkedList
+//The definition of data for the normal node.
+static struct node_data
 {
-    int64_t data;
-    int64_t :0;
-    l_Node *next;
-    l_Node *prev;
+    uint64_t integer;
 };
-
-/*The definition of circular listed list definition.
- *(The data is set by type *int* .)
- */
-static struct CircularLinkedList
-{
-    int64_t data;
-    int64_t :0;
-    l_Node *next;
-    l_Node *prev;
-};
-/*The circular_linked_list is as singly_linked_list or doubly_linked_list,
- *but there is no NULL to be linked, instead of 
- *linking the head node and the tail node together,
- *and we construct the circular_linked_list type based on doubly linked list.
- */
 
 //Constructing compound linked list type, then setting the mode by variable *type* .
-struct l_Node
+typedef struct LINKED_LIST_NODE
 {
     enum LinkedListType type;
     
     union
     {
-        struct SinglyLinkedList      singly;
-        struct PolynomialLinkedList  polynomial;
-        struct DoublyLinkedList      doubly;
-        struct CircularLinkedList    circular;
+        struct polynomial_data polynomial;
+        struct node_data data;
     };
-};
+
+    struct LINKED_LIST_NODE *link;
+} l_Node;
+
+//The *sentinel node* means the end of a linked list.
+l_Node *sentinel_node;
 
 //Function prototype for operation of linked list:
 void     l_control_table    (l_Node **, uint64_t);
