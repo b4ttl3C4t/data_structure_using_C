@@ -1,5 +1,3 @@
-#ifdef LINKED_LIST_H
-
 /*You should set the mode for the newer node (as following)
  *whenever you construst it.
  */
@@ -36,32 +34,37 @@ typedef struct LINKED_LIST_NODE
     struct LINKED_LIST_NODE *link;
 } l_Node;
 
+typedef struct LINKED_LIST
+{
+    l_Node *head;
+    l_Node *tail;
+} l_List;
+
 //The *sentinel node* means the end of a linked list.
 l_Node *sentinel_node;
 
 //Function prototype for operation of linked list:
-void     l_control_table    (l_Node **, uint64_t);
-l_Node * l_initialization   (void);
+void l_control_table    (l_List **, uint64_t);
 
-//l_Node * l_construction     (l_Node *);
-//l_Node * l_insertion        (l_Node *, uint64_t);
-l_Node * l_insert_head      (l_Node *);
-//void     l_insert_tail      (l_Node *);
+//void l_construction     (l_List *);
+//void l_insertion        (l_List *, uint64_t);
+void l_insert_head      (l_List *);
+//void l_insert_tail      (l_List *);
 
-//void     l_destruction      (l_Node *);
-//l_Node * l_deletion         (l_Node *, uint64_t);
-l_Node * l_delete_head      (l_Node *);
-void     l_delete_tail      (l_Node *);
+//void l_destruction      (l_List *);
+//void l_deletion         (l_List *, uint64_t);
+void l_delete_head      (l_List *);
+void l_delete_tail      (l_List *);
 
 //Useful operation and algorithm based on divergent linked list type.
-//l_Node * l_search           (l_Node *, uint64_t);
-void     l_display          (l_Node *);
-//l_Node * l_sort             (l_Node *);
-//l_Node * l_reverse          (l_Node *);
-//bool     l_is_list_empty    (l_Node *);
+//void l_search           (l_List *, uint64_t);
+void l_display          (l_List *);
+//void l_sort             (l_List *);
+//void l_reverse          (l_List *);
+//bool l_is_list_empty    (l_List *);
 /*
 //The following algorithm is only for polynomial linked list.
-void   polynomial_addition          (l_Node *, l_Node *);
-void   polynomial_subtraction       (l_Node *, l_Node *);
-void   polynomial_multiplication    (l_Node *, l_Node *);
-void   polynomial_division          (l_Node *, l_Node *);*/
+l_List * polynomial_addition          (l_List *, l_List *);
+l_List * polynomial_subtraction       (l_List *, l_List *);
+l_List * polynomial_multiplication    (l_List *, l_List *);
+l_List * polynomial_division          (l_List *, l_List *);*/

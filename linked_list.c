@@ -4,8 +4,9 @@
 #include <stdbool.h>
 #include "linked_list.h"
 
-#define LIST_SIZE 50
-#define LIST_TYPE_SIZE 2
+#define LIST_SIZE       50
+#define LIST_TYPE_SIZE  2
+#define OPCODE_SIZE     13
 #define MALLOC_ERROR    "The memory allocation for linked list aborts."
 #define MODE_ERROR      "The mode is not accessible."
 #define OPCODE_ERROR    "The opcode is not accessible."
@@ -13,68 +14,57 @@
 
 int main(void)
 {
-    l_Node *head;
+    l_List *list = (l_List *)malloc(sizeof(l_List));
     uint64_t opcode;
 
     while(1)
-    { 
-        printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+    {
+        printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
                             "> control_table: ",
                             "  |code|    function    |",
-                            "  |  0 | initialization |",
-                            "  |  1 | construction   |",
-                            "  |  2 | insertion      |",
-                            "  |  3 | insert_head    |",
-                            "  |  4 | insert_tail    |",
-                            "  |  5 | destruction    |",
-                            "  |  6 | deletion       |",
-                            "  |  7 | delete_head    |",
-                            "  |  8 | delete_tail    |",
-                            "  |  9 | search         |",
-                            "  | 10 | display        |",
-                            "  | 11 | sort           |",
-                            "  | 12 | reverse        |",
-                            "  | 13 | is_list_empty  |",
-                            "  | 14 |      EXIT      |",
+                            "  |  0 | construction   |",
+                            "  |  1 | insertion      |",
+                            "  |  2 | insert_head    |",
+                            "  |  3 | insert_tail    |",
+                            "  |  4 | destruction    |",
+                            "  |  5 | deletion       |",
+                            "  |  6 | delete_head    |",
+                            "  |  7 | delete_tail    |",
+                            "  |  8 | search         |",
+                            "  |  9 | display        |",
+                            "  | 10 | sort           |",
+                            "  | 11 | reverse        |",
+                            "  | 12 | is_list_empty  |",
+                            "  | 13 |      EXIT      |",
                             "> control_table: What do you want to do now? Please enter the opcode:");
         scanf("%llu", &opcode);
         getchar();
 
-        if(opcode == 14)
-        {
-            printf("\n%s", "> control_table: Quitting the process for linked list");
-            return 0;
-        }
-
-        if(opcode > 14)
+        if(opcode > OPCODE_SIZE)
         {
             fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
         }
 
-        l_control_table(&head, opcode);
+        l_control_table(&list, opcode);
     }
 }
 
-void l_control_table(l_Node **node, uint64_t opcode)
+void l_control_table(l_List **node, uint64_t opcode)
 {
     uint64_t index;
 
     switch(opcode)
     {
     case 0:
-        *node = l_initialization();
         break;
 
     case 3:
-        *node = l_insert_head(*node);
         break;
 
     case 7:
-        *node = l_delete_head(*node);
         break;
 
     case 10:
-        l_display(*node);
         break;
     }
 
@@ -83,6 +73,7 @@ void l_control_table(l_Node **node, uint64_t opcode)
 
 static void input_data  (l_Node *node);
 static void swap        (l_Node *X, l_Node *Y);
+static l_Node * node_xor(l_Node *X, l_Node *Y);
 
 /*----------------------------------------function *l_initialization*  begin----------------------------------------*/
 l_Node * l_initialization(void)
@@ -115,11 +106,6 @@ l_Node * l_initialization(void)
         fprintf(stderr, "\n> Initialization: %s", MODE_ERROR);
         return NULL;
     }
-
-    input_data(head);
-    //Initializate linkage for head node.
-    ;
-
     return head;
 }
 /*----------------------------------------function *l_initialization* end  ----------------------------------------*/
