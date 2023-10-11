@@ -1,21 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+
 /*You should set the mode for the newer node (as following)
  *whenever you construst it.
  */
-static enum LinkedListType
+enum LinkedListType
 {
     normal      = 0,
     polynomial  = 1,
 };
 
 //The definition of data for polynomials.
-static struct polynomial_data
+struct polynomial_data
 {
     double coefficient;
     uint64_t power;
 };
 
 //The definition of data for the normal node.
-static struct node_data
+struct node_data
 {
     uint64_t integer;
 };
