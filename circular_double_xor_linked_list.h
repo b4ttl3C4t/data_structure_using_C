@@ -36,8 +36,8 @@ typedef struct LINKED_LIST_NODE
 
 typedef struct LINKED_LIST
 {
-    l_Node *head;
-    l_Node *tail;
+    l_Node *left;
+    l_Node *right;
 } l_List;
 
 //The *sentinel node* means the end of a linked list.
