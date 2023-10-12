@@ -3,32 +3,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <time.h>
+#include "matrix.h"
 
-#define MATRIX_SIZE 255
 #define MALLOC_ERROR    "The memory allocation for linked list aborts."
-
-//construct mathematical model of matrix: 
-typedef struct Matrix_s
-{
-    uint8_t row;
-    uint8_t column;
-    bool is_square;
-    double **data;
-}Matrix;
-
-//function prototype of operation of matrix(setting):
-Matrix * malloc_matrix(uint8_t, uint8_t);
-Matrix * random_matrix(uint8_t, uint8_t, double, double);
-void     free_matrix(Matrix*);
-void     matrix_print(Matrix*);
-
-//function prototype of operation of matrix(math):
-Matrix * matrix_addition(Matrix*);
-Matrix * matrix_mutiplication(Matrix*, Matrix*);
-Matrix * matrix_transpose(Matrix*);
-Matrix * UV_decomposition(Matrix*);
-int64_t  determinant(Matrix*);
-Matrix * matrix_inverse(Matrix*);
 
 int main(void)
 {
