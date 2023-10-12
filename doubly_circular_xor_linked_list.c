@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "circular_double_xor_linked_list.h"
+#include "doubly_circular_xor_linked_list.h"
 
 #define LIST_SIZE       50
 #define LIST_TYPE_SIZE  2
