@@ -6,7 +6,7 @@
 
 #define LIST_SIZE       50
 #define LIST_TYPE_SIZE  2
-#define OPCODE_SIZE     13
+#define OPCODE_SIZE     14
 #define MALLOC_ERROR    "The memory allocation for linked list aborts."
 #define MODE_ERROR      "The mode is not accessible."
 #define OPCODE_ERROR    "The opcode is not accessible."
@@ -40,7 +40,7 @@ int main(void)
         scanf("%llu", &opcode);
         getchar();
 
-        if(opcode > OPCODE_SIZE)
+        if(opcode >= OPCODE_SIZE)
         {
             fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
         }
@@ -49,7 +49,7 @@ int main(void)
     }
 }
 
-void l_control_table(l_List **node, uint64_t opcode)
+void l_control_table(l_List **list, uint64_t opcode)
 {
     uint64_t index;
 
@@ -76,36 +76,34 @@ static void swap        (l_Node *X, l_Node *Y);
 static l_Node * node_xor(l_Node *X, l_Node *Y);
 
 /*----------------------------------------function *l_initialization*  begin----------------------------------------*/
-l_Node * l_initialization(void)
+l_List * l_initialization(void)
 {
     printf("\n%s", "> Initialization: Allocating the memory space for head node.");
-    l_Node *head = (l_Node *)calloc(1, sizeof(l_Node));
+    l_List *list = (l_List *)calloc(1, sizeof(l_List));
 
     //Probing whether the memory allocation successes.
-    if(head == NULL)
+    if(list == NULL)
     {
-        fprintf(stderr, "\n> Initialization: %s", MALLOC_ERROR);
+        fprintf(stderr, "\n%s%s", "> Initialization: ", MALLOC_ERROR);
         return NULL;
     }
 
     printf("\n%s", "> Initialization: The memory allocation completes!");
-    printf("\n%s\n%s\n%s\n%s\n%s",  "> Initialization: Type mode table as following:",
-                                    "  | 0 | singly linked list     |",
-                                    "  | 1 | polynomial linked list |",
-                                    "  | 2 | doubly linked list     |",
-                                    "  | 3 | circular linked list   |");
+    printf("\n%s\n%s\n%s",  "> Initialization: Type mode table as following:",
+                                    "  | 0 | normal linked list     |",
+                                    "  | 1 | polynomial linked list |");
     
     //Interface for setting mode.
     printf("\n%s", "> Initialization: Please set the type mode for the head node:");
-    scanf("%llu", &head->type);
+    scanf("%llu", list->type);
     getchar();
     
     //Probing whether the type mode is correct.
-    if(head->type >= LIST_TYPE_SIZE)
+    if(list->type >= LIST_TYPE_SIZE)
     {
-        fprintf(stderr, "\n> Initialization: %s", MODE_ERROR);
+        fprintf(stderr, "\n%s%s", "> Initialization: ", MODE_ERROR);
         return NULL;
     }
-    return head;
+    return list;
 }
 /*----------------------------------------function *l_initialization* end  ----------------------------------------*/
