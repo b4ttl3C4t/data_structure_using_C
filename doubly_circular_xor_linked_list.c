@@ -12,6 +12,29 @@
 #define OPCODE_ERROR    "The opcode is not accessible."
 #define INDEX_ERROR     "The node does not exist."
 
+//The definition of data for polynomials.
+struct polynomial_data
+{
+    double coefficient;
+    uint64_t power;
+};
+
+//The definition of data for the normal node.
+struct node_data
+{
+    uint64_t integer;
+};
+
+//Constructing the data of compound linked list type.
+struct Linked_List_Data_s
+{
+    union
+    {
+        struct polynomial_data polynomial;
+        struct node_data data;
+    };
+};
+
 int main(void)
 {
     l_List *list = (l_List *)malloc(sizeof(l_List));

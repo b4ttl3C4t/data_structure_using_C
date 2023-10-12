@@ -15,41 +15,18 @@ enum LinkedListType
     polynomial  = 1,
 };
 
-//The definition of data for polynomials.
-struct polynomial_data
-{
-    double coefficient;
-    uint64_t power;
-};
-
-//The definition of data for the normal node.
-struct node_data
-{
-    uint64_t integer;
-};
-
-//Constructing the data of compound linked list type.
-typedef struct LINKED_LIST_DATA
-{
-    union
-    {
-        struct polynomial_data polynomial;
-        struct node_data data;
-    };
-} l_Data;
-
 /*The node type is for doubly circular xor linked list.*/
-typedef struct LINKED_LIST_NODE
+typedef struct Linked_List_Node_s
 {
-    struct LINKED_LIST_DATA *data;
-    struct LINKED_LIST_NODE *link;
+    struct Linked_List_Data_s *data;
+    struct Linked_List_Node_s *link;
 } l_Node;
 /*The pointer to data is used to promote the code flexiblity, 
  *when you swap the data within two node, or change the data setting.
  */
 
 //The linked list type
-typedef struct LINKED_LIST_NODE
+typedef struct Linked_List_s
 {
     enum LinkedListType type;
     l_Node *head_node;

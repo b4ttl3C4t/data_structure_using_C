@@ -5,6 +5,7 @@
 #include <time.h>
 
 #define MATRIX_SIZE 255
+#define MALLOC_ERROR    "The memory allocation for linked list aborts."
 
 //construct mathematical model of matrix: 
 typedef struct Matrix_s
@@ -16,33 +17,37 @@ typedef struct Matrix_s
 }Matrix;
 
 //function prototype of operation of matrix(setting):
-Matrix* malloc_matrix(uint8_t, uint8_t);
-Matrix* random_matrix(uint8_t, uint8_t, double, double);
-void    free_matrix(Matrix*);
-void    traverse(Matrix*);
+Matrix * malloc_matrix(uint8_t, uint8_t);
+Matrix * random_matrix(uint8_t, uint8_t, double, double);
+void     free_matrix(Matrix*);
+void     matrix_print(Matrix*);
 
 //function prototype of operation of matrix(math):
-Matrix* matrix_addition(Matrix*);
-Matrix* matrix_mutiplication(Matrix*, Matrix*);
-Matrix* transpose(Matrix*);
-Matrix* UV_decomposition(Matrix*);
-int64_t determinant(Matrix*);
-Matrix* inverse(Matrix*);
+Matrix * matrix_addition(Matrix*);
+Matrix * matrix_mutiplication(Matrix*, Matrix*);
+Matrix * matrix_transpose(Matrix*);
+Matrix * UV_decomposition(Matrix*);
+int64_t  determinant(Matrix*);
+Matrix * matrix_inverse(Matrix*);
 
-int32_t main(void)
+int main(void)
 {
-    
+    Matrix* foo = random_matrix(8, 7, 0, 5);
+    matrix_print(foo);
+
     return 0;
 }
 
 Matrix* malloc_matrix(uint8_t row, uint8_t column)
 {
-    if(row > MATRIX_SIZE || row == 0)
+    if(row == 0)
     {
+        fprintf(stderr, "\n%s%s", "> malloc_matrix: ", MALLOC_ERROR);
         return NULL;
     }
-    if(column > MATRIX_SIZE || column == 0)
+    if(column == 0)
     {
+        fprintf(stderr, "\n%s%s", "> malloc_matrix: ", MALLOC_ERROR);
         return NULL;
     }
 
@@ -63,14 +68,25 @@ Matrix* random_matrix(uint8_t row, uint8_t column, double minimum, double maximu
 {
     srand(time(NULL));
     Matrix *new_matrix = malloc_matrix(row, column);
-    
-    for(int i = 0; i < row; ++i)
+
+    if(new_matrix == NULL)
     {
-        for(int j = 0; j < column; ++j)
+        fprintf(stderr, "\n%s%s", "> random_matrix: ", MALLOC_ERROR);
+        return NULL;
+    }
+
+    unsigned int i, j;
+
+    for(i = 0; i < row; ++i)
+    {
+        for(j = 0; j < column; ++j)
         {
-            new_matrix->data[i][j] = minimum + (maximum * (rand() / RAND_MAX));
+            new_matrix->data[i][j] = minimum + (maximum * ((double)rand() / RAND_MAX));
         }
     }
+    new_matrix->row         = row;
+    new_matrix->column      = column;
+    new_matrix->is_square   = (row == column)? 1: 0;
 
     return new_matrix;
 }
@@ -81,7 +97,9 @@ Matrix* random_matrix(uint8_t row, uint8_t column, double minimum, double maximu
 
 void free_matrix(Matrix* matrix)
 {
-    for(int i = 0; i < matrix->row; ++i)
+    unsigned int i;
+
+    for(i = 0; i < matrix->row; ++i)
     {
         free(matrix->data[i]);
     }
@@ -89,9 +107,32 @@ void free_matrix(Matrix* matrix)
     free(matrix);
 }
 
-void traverse(Matrix* matrix)
+void matrix_print(Matrix* matrix)
 {
+    unsigned int i, j;
+
+    printf("\n> matrix_print: The size of row and column are *%u* and *%u* respectively.\n",
+            matrix->row,
+            matrix->column);
     
+    for(i = 0; i < matrix->row; ++i)
+    {
+        printf("%s", "  |");
+        for(j = 0; j < matrix->column; ++j)
+        {
+            printf("%lf\t", matrix->data[i][j]);
+        }
+        printf("%s", "\n");
+    }
+
+    if(matrix->is_square)
+    {
+        printf("\n%s", "> matrix_print: The matrix is square.");
+    }
+    else
+    {
+        printf("\n%s", "> matrix_print: The matrix is *not* square.");
+    }
 }
 
 Matrix* matrix_mutiplication(Matrix* matrix_x, Matrix* matrix_y)
