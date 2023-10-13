@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 //Function prototype for operation of linked list:
-void l_control_table    (l_List **, uint64_t);
+int8_t l_control_table  (l_List *);
 
 void l_construction     (l_List *);
 //void l_insertion        (l_List *, uint64_t);
@@ -24,7 +24,7 @@ void l_construction     (l_List *);
 //void l_display          (l_List *);
 //void l_sort             (l_List *);
 //void l_reverse          (l_List *);
-//bool l_is_list_empty    (l_List *);
+bool l_is_list_empty    (l_List *);
 /*
 //The following algorithm is only for polynomial linked list.
 l_List * polynomial_addition          (l_List *, l_List *);

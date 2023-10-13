@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
 #include "doubly_circular_xor_linked_list.h"
-
-
-
 #define LIST_TYPE_SIZE  2
 #define OPCODE_SIZE     14
 #define MALLOC_ERROR    "The memory allocation for linked list aborts."
@@ -15,23 +8,19 @@
 
 
 
+//Setting the mode for the newer node (as following) whenever you construst it.
 enum LinkedListType
 {
     normal      = 0,
     polynomial  = 1,
 };
-/*You should set the mode for the newer node (as following)
- *whenever you construst it.
- */
 
+//Probing the direction of linked list;
 enum LinkedListReverse
 {
     forward  = 0,
     backward = 1,
 };
-/*You should set the mode for the newer node (as following)
- *whenever you construst it.
- */
 
 //The definition of data for polynomials.
 struct polynomial_data
@@ -70,7 +59,7 @@ typedef struct Linked_List_Node_s
 typedef struct Linked_List_s
 {
     enum    LinkedListType       type;
-    enum    LinkedListReverse    status;
+    enum    LinkedListReverse    direction;
     struct  Linked_List_Node_s * head;
     struct  Linked_List_Node_s * dummy_sentinel_node;
 } l_List;
@@ -91,46 +80,51 @@ inline static void      input_data      (enum LinkedListType type, l_Node *node)
 inline static void      swap_data       (l_Node *X, l_Node *Y);
 inline static l_Node *  node_xor        (l_Node *X, l_Node *Y);
 
-int main(void)
+
+
+void main(void)
 {
-    l_List *list = initialization();
-    uint64_t opcode;
+    l_List * list = initialization();
 
-    while(1)
-    {
-        printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
-                            "> control_table: ",
-                            "  |code|    function    |",
-                            "  |  0 | construction   |",
-                            "  |  1 | insertion      |",
-                            "  |  2 | insert_head    |",
-                            "  |  3 | insert_tail    |",
-                            "  |  4 | destruction    |",
-                            "  |  5 | deletion       |",
-                            "  |  6 | delete_head    |",
-                            "  |  7 | delete_tail    |",
-                            "  |  8 | search         |",
-                            "  |  9 | display        |",
-                            "  | 10 | sort           |",
-                            "  | 11 | reverse        |",
-                            "  | 12 | is_list_empty  |",
-                            "  | 13 |      EXIT      |",
-                            "> control_table: What do you want to do now? Please enter the opcode:");
-        scanf("%llu", &opcode);
-        getchar();
-
-        if(opcode >= OPCODE_SIZE)
-        {
-            fprintf(stderr, "\n> control_table: %s", OPCODE_ERROR);
-        }
-
-        l_control_table(&list, opcode);
-    }
+    while(l_control_table(list));
+    //Not breaking the loop until l_control_table appear *opcode 13 (EXIT)*.
 }
 
-void l_control_table(l_List **list, uint64_t opcode)
+int8_t l_control_table(l_List *list)
 {
-    uint64_t index;
+    static uint64_t index, opcode;
+
+    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+                        "> control_table: ",
+                        "  |code|    function    |",
+                        "  |  0 | construction   |",
+                        "  |  1 | insertion      |",
+                        "  |  2 | insert_head    |",
+                        "  |  3 | insert_tail    |",
+                        "  |  4 | destruction    |",
+                        "  |  5 | deletion       |",
+                        "  |  6 | delete_head    |",
+                        "  |  7 | delete_tail    |",
+                        "  |  8 | search         |",
+                        "  |  9 | display        |",
+                        "  | 10 | sort           |",
+                        "  | 11 | reverse        |",
+                        "  | 12 | is_list_empty  |",
+                        "  | 13 |      EXIT      |",
+                        "> control_table: What do you want to do now? Please enter the opcode:");
+    scanf("%llu", &opcode);
+    getchar();
+
+    if(opcode == 13)
+    {
+        printf("\n%s", "> control_table: Exiting the program operation...");
+        return false;
+    }
+
+    if(opcode >= OPCODE_SIZE)
+    {
+        fprintf(stderr, "\n%s%s", "> control_table: ", OPCODE_ERROR);
+    }
 
     switch(opcode)
     {
@@ -147,10 +141,10 @@ void l_control_table(l_List **list, uint64_t opcode)
         break;
     }
 
-    return;
+    return true;
 }
 
-/*----------------------------------------function *l_initialization*  begin----------------------------------------*/
+
 l_List * initialization(void)
 {
     printf("\n%s", "> Initialization: Allocating the memory space for head node.");
@@ -182,7 +176,6 @@ l_List * initialization(void)
 
     return list;
 }
-/*----------------------------------------function *l_initialization* end  ----------------------------------------*/
 
 //Inputing the data of the node.
 static void input_data(enum LinkedListType type, l_Node *node)
