@@ -24,7 +24,7 @@ void l_construction     (l_List *);
 //void l_display          (l_List *);
 //void l_sort             (l_List *);
 //void l_reverse          (l_List *);
-bool l_is_list_empty    (l_List *);
+bool l_is_empty         (l_List *);
 /*
 //The following algorithm is only for polynomial linked list.
 l_List * polynomial_addition          (l_List *, l_List *);
