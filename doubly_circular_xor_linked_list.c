@@ -53,6 +53,7 @@ typedef struct Linked_List_Node_s
 //The linked list type.
 typedef struct Linked_List_s
 {
+    uint64_t                     size;
     enum   LinkedListType        type;
     struct Linked_List_Node_s   *head;
     struct Linked_List_Node_s   *tail;
@@ -60,11 +61,6 @@ typedef struct Linked_List_s
     struct Linked_List_Node_s *previous;
     struct Linked_List_Node_s *current;
     struct Linked_List_Node_s *temporary;
-
-    /*
-    struct Linked_List_Node_s *sentinel;
-    struct Linked_List_Node_s *dummy;
-    */
 } l_List;
 /*Constructing compound linked list type, then setting the mode by variable *type* . */
 /*The *head node* means the start of the linked list. */
@@ -72,7 +68,7 @@ typedef struct Linked_List_s
 /*Temporary node type:
  *The *previous node* , *current node* , and *temporary node* record the status of the node.
  *The *sentinel node* means the check point of the linked list. */
-/*Special operational node type:
+/*Special operational node type (not in the structure):
  *The *dummy node* can avoid the special operation to the head node.
  *and let the code more clear and promote its readness. 
  *Those two can merge together, since the function of them is similar. 
@@ -181,7 +177,7 @@ void l_construction(l_List *list)
         new->data  = new_data;
         list->tail = new;
         input_data(list->type, new);
-        
+
         if(is_first_flag)
         {
             is_first_flag = 0;
