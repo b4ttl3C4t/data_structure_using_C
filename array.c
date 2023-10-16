@@ -1,26 +1,59 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include "array.h"
 
-/*----------------------code for testing----------------------
- *   int arr[BUF_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
- *   traverse(15, arr);
- *  
- *   insertion(15, arr, 5, 99);
- *   traverse(16, arr);
- *   
- *   deletion(16, arr, 5);
- *   traverse(15, arr);
- *   
- *   printf("%d \n", search(16, arr, 5));
- *   
- *   update(16, arr, 10, 100);
- *   traverse(15, arr);
- */
+#define ARRAY_MAX_SIZE 100
+
+#define FREE_MEMORY_ERROR   "The pointer to the memory is NULL."
+#define INDEX_ERROR         "The memory corresponding the index is not accessible."
+
+
+
+typedef struct Array_Data_s
+{
+    double data;
+} a_Data;
+
+typedef struct Array_s
+{
+    uint64_t length;
+    a_Data array[ARRAY_MAX_SIZE];
+} a_Array;
+
+
+
+//Internal function.
+static inline void  input_data  (a_Data *);
+static inline void  output_data (a_Data *);
+static bool         is_empty    (a_Array *);
+static bool         is_full     (a_Array *);
+
+void main(void)
+{
+    a_Array * arr;
+}
+
+void a_construction(a_Array *arr)
+{
+    arr = (a_Array *)malloc(1 * sizeof(uint64_t) + ARRAY_MAX_SIZE * sizeof(a_Data));
+}
+
+void a_destruction(a_Array *arr)
+{
+    if(arr == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> destruction: ", FREE_MEMORY_ERROR);
+        return NULL;
+    }
+
+    free(arr);
+}
 
 //print each element of array:
-void traverse(int length, int *arr)
+void a_traverse(a_Array *arr)
 {
-    for(int each = 0; each < length; ++each)
+    for(uint64_t each = 0; each < arr->length; ++each)
     {
         printf("%3d ", arr[each]);
     }
@@ -29,56 +62,115 @@ void traverse(int length, int *arr)
 
 //insert an element at a specific index.
 //iterate each element from last to first to match the index.
-void insertion(int length, int *arr, int index, int data)
+void a_insertion(a_Array *arr, uint64_t index)
 {
-    int each = length;
-
-    if(index > length)
+    if(index > arr->length)
     {
+        fprintf(stderr, "\n%s%s", "> insertion: ", INDEX_ERROR);
         return;
     }
-    for(each = length; each >= index; --each)
+    
+    uint64_t each;
+    for(each = arr->length; each >= index; --each)
     {
-        arr[each + 1] = arr[each];
+        arr->array[each + 1] = arr->array[each];
     }
-    arr[each + 1] = data;
+
+    printf("\n%s", "> insertion: Please set the data for the element:");
+    input_data(&arr->array[index]);
 }
 
 //insert an element at a specific index.
 //iterate each element from first to last to match the index.
-void deletion(int length, int *arr, int index)
+void a_deletion(a_Array *arr, uint64_t index)
 {
-    if(index > length)
+    if(index > arr->length)
     {
+        fprintf(stderr, "\n%s%s", "> insertion: ", INDEX_ERROR);
         return;
     }
-    for(int each = 0; each < length - 1; ++each)
+
+    for(uint64_t each = 0; each < arr->length - 1; ++each)
     {
         if(each >= index)
         {
-            arr[each] = arr[each + 1];
+            arr->array[each] = arr->array[each + 1];
         }
     }
 }
 
 //search an element at a specific index.
 //operation of array supports for direct access.
-int search(int length, int *arr, int index)
+void a_search(a_Array *arr, uint64_t index)
 {
-    if(index >= length)
+    if(index >= arr->length)
     {
-        return -1;
+        fprintf(stderr, "\n%s%s", "> a_search: ", INDEX_ERROR);
+        return;
     }
-    return arr[index];
+
+    printf("\n%s", "> a_search: The data of the element corresponding the index is as following:");
+    output_data(&arr->array[index]);
 }
 
 //update an element at a specific index.
 //operation of array supports for direct access.
-void update(int length, int *arr, int index, int data)
+void a_update(a_Array *arr, uint64_t index)
 {
-    if(index >= length)
+    if(index >= arr->length)
     {
+        fprintf(stderr, "\n%s%s", "> a_update: ", INDEX_ERROR);
         return;
     }
-    arr[index] = data;
+
+    printf("\n%s", "> a_update: Please set the data for the element:");
+    input_data(&arr->array[index]);
+}
+
+void a_is_empty(a_Array *arr)
+{
+    if(arr->length == 0)
+    {
+        printf("\n%s", "> a_is_empty: The array is empty now.");
+        return;
+    }
+    printf("\n%s", "> a_is_empty: The array is not empty now.");
+}
+
+void a_is_full(a_Array *arr)
+{
+    if(arr->length == ARRAY_MAX_SIZE)
+    {
+        printf("\n%s", "> a_is_full: The array is full now.");
+        return;
+    }
+    printf("\n%s", "> a_is_full: The array is not full now.");
+}
+
+static inline void input_data(a_Data *element)
+{
+    scanf("%lf", &element->data);
+}
+
+static inline void output_data(a_Data *element)
+{
+    printf(" %lf", element->data);
+}
+
+static inline bool is_empty(a_Array *arr)
+{
+    if(arr->length == 0)
+    {
+        return 1;
+    }
+    return 0;
+}
+
+static inline bool is_full(a_Array *arr)
+{
+    if(arr->length == ARRAY_MAX_SIZE)
+    {
+        return 1;
+    }
+    return 0;
 }

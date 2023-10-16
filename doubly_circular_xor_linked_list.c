@@ -28,7 +28,7 @@ struct polynomial_data
 //The definition of data for the normal node.
 struct normal_data
 {
-    uint64_t integer;
+    int64_t integer;
 };
 
 //Constructing the data of compound linked list type.
@@ -81,7 +81,8 @@ typedef struct Linked_List_s
 //Internal function.
        static l_List *  initialization  (void);
        static void      special_handle  (enum LinkedListType type, l_Node *node);
-inline static void      input_data      (enum LinkedListType type, l_Node *node);
+       static void      input_data      (enum LinkedListType type, l_Node *node);
+       static void      output_data     (enum LinkedListType type, l_Node *node);
 inline static void      swap_data       (l_Node *X, l_Node *Y);
 inline static l_Node *  node_xor        (l_Node *X, l_Node *Y);
 inline static bool      is_empty        (l_List *list);
@@ -184,7 +185,6 @@ void l_construction(l_List *list)
             list->head = new;
         }
     } while (1);
-    
 }
 
 bool l_is_empty(l_List *list)
@@ -201,30 +201,30 @@ bool l_is_empty(l_List *list)
 
 l_List * initialization(void)
 {
-    printf("\n%s", "> Initialization: Allocating the memory space for head node.");
+    printf("\n%s", "> initialization: Allocating the memory space for head node.");
     l_List *list = (l_List *)calloc(1, sizeof(l_List));
 
     //Probing whether the memory allocation successes.
     if(list == NULL)
     {
-        fprintf(stderr, "\n%s%s", "> Initialization: ", MALLOC_ERROR);
+        fprintf(stderr, "\n%s%s", "> initialization: ", MALLOC_ERROR);
         return NULL;
     }
 
-    printf("\n%s", "> Initialization: The memory allocation completes!");
-    printf("\n%s\n%s\n%s",  "> Initialization: Type mode table as following:",
+    printf("\n%s", "> initialization: The memory allocation completes!");
+    printf("\n%s\n%s\n%s",  "> initialization: Type mode table as following:",
                             "  | 0 | normal linked list     |",
                             "  | 1 | polynomial linked list |");
     
     //Interface for setting mode.
-    printf("\n%s", "> Initialization: Please set the type mode for the head node:");
+    printf("\n%s", "> initialization: Please set the type mode for the head node:");
     scanf("%llu", list->type);
     getchar();
     
     //Probing whether the type mode is correct.
     if(list->type >= LIST_TYPE_SIZE)
     {
-        fprintf(stderr, "\n%s%s", "> Initialization: ", MODE_ERROR);
+        fprintf(stderr, "\n%s%s", "> initialization: ", MODE_ERROR);
         return NULL;
     }
 
@@ -251,6 +251,27 @@ static void input_data(enum LinkedListType type, l_Node *node)
         scanf("%d%d",   node->data->polynomial.coefficient,
                         node->data->polynomial.power);
         getchar();
+        return;
+    }
+}
+
+static void output_data(enum LinkedListType type, l_Node *node)
+{
+    if(node == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> input_data: ", INDEX_ERROR);
+        return;
+    }
+
+    if(type == normal)
+    {
+        printf("%d", node->data->default_data.integer);
+        return;
+    }
+    if(type == polynomial)
+    {
+        printf("%d%d",  node->data->polynomial.coefficient,
+                        node->data->polynomial.power);
         return;
     }
 }

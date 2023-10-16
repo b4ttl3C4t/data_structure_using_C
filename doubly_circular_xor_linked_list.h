@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+typedef struct Linked_List_s l_List;
+
 //Function prototype for operation of linked list:
 int8_t l_control_table  (l_List *);
 
