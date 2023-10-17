@@ -11,82 +11,15 @@
 
 
 
-//Setting the mode for the newer node (as following) whenever you construst it.
-enum LinkedListType
-{
-    normal      = 0,
-    polynomial  = 1,
-};
-
-//The definition of data for polynomials.
-struct polynomial_data
-{
-    double   coefficient;
-    uint64_t power;
-};
-
-//The definition of data for the normal node.
-struct normal_data
-{
-    int64_t integer;
-};
-
-//Constructing the data of compound linked list type.
-typedef struct Linked_List_Data_s
-{
-    union
-    {
-        struct polynomial_data polynomial;
-        struct normal_data     default_data;
-    };
-} l_Data;
-
-//The node type is for doubly circular xor linked list.
-typedef struct Linked_List_Node_s
-{
-    struct Linked_List_Data_s *data;
-    struct Linked_List_Node_s *link;
-} l_Node;
-/*The pointer to data is used to promote the code flexiblity, 
- *when you swap the data within two node, or change the data setting. */
-
-//The linked list type.
-typedef struct Linked_List_s
-{
-    uint64_t                     size;
-    enum   LinkedListType        type;
-    struct Linked_List_Node_s   *head;
-    struct Linked_List_Node_s   *tail;
-    
-    struct Linked_List_Node_s *previous;
-    struct Linked_List_Node_s *current;
-    struct Linked_List_Node_s *temporary;
-} l_List;
-/*Constructing compound linked list type, then setting the mode by variable *type* . */
-/*The *head node* means the start of the linked list. */
-/*The *tail node* means the end of the linked list. */
-/*Temporary node type:
- *The *previous node* , *current node* , and *temporary node* record the status of the node.
- *The *sentinel node* means the check point of the linked list. */
-/*Special operational node type (not in the structure):
- *The *dummy node* can avoid the special operation to the head node.
- *and let the code more clear and promote its readness. 
- *Those two can merge together, since the function of them is similar. 
- *(Actually, the *dummy node* only would be used to singly linked list
- * and could be replaced by *previous node* ,
- * moreover, the *sentinel node* could be replaced as well.) */
-
-
-
-//Internal function.
+//The interface of the internal function.
        static l_List *  initialization  (void);
        static void      special_handle  (enum LinkedListType type, l_Node *node);
        static void      input_data      (enum LinkedListType type, l_Node *node);
        static void      output_data     (enum LinkedListType type, l_Node *node);
+       static l_Node *  search_node     (l_List *list, uint64_t index);
 inline static void      swap_data       (l_Node *X, l_Node *Y);
 inline static l_Node *  node_xor        (l_Node *X, l_Node *Y);
 inline static bool      is_empty        (l_List *list);
-inline static l_Node *  search_node     (l_List *list, uint64_t index);
 
 
 
@@ -187,7 +120,7 @@ void l_construction(l_List *list)
     } while (1);
 }
 
-bool l_is_empty(l_List *list)
+void l_is_empty(l_List *list)
 {
     if(list->head == NULL)
     {
@@ -231,7 +164,9 @@ l_List * initialization(void)
     return list;
 }
 
-//Inputing the data of the node.
+
+
+//The implementation of the internal function.
 static void input_data(enum LinkedListType type, l_Node *node)
 {
     if(node == NULL)
@@ -304,7 +239,7 @@ static bool is_empty(l_List *list)
 }
 
 //Searching weather the node exists.
-inline static l_Node * search_node(l_List *list, uint64_t index)
+static l_Node * search_node(l_List *list, uint64_t index)
 {
     if(is_empty(list))
     {

@@ -1,29 +1,11 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
 #include "array.h"
-
-#define ARRAY_MAX_SIZE 100
 
 #define FREE_MEMORY_ERROR   "The pointer to the memory is NULL."
 #define INDEX_ERROR         "The memory corresponding the index is not accessible."
 
 
 
-typedef struct Array_Data_s
-{
-    double data;
-} a_Data;
-
-typedef struct Array_s
-{
-    uint64_t length;
-    a_Data array[ARRAY_MAX_SIZE];
-} a_Array;
-
-
-
-//Internal function.
+//The interface of the internal function.
 static inline void  input_data  (a_Data *);
 static inline void  output_data (a_Data *);
 static bool         is_empty    (a_Array *);
@@ -73,11 +55,11 @@ void a_insertion(a_Array *arr, uint64_t index)
     uint64_t each;
     for(each = arr->length; each >= index; --each)
     {
-        arr->array[each + 1] = arr->array[each];
+        arr->element[each + 1] = arr->element[each];
     }
 
     printf("\n%s", "> insertion: Please set the data for the element:");
-    input_data(&arr->array[index]);
+    input_data(&arr->element[index]);
 }
 
 //insert an element at a specific index.
@@ -94,7 +76,7 @@ void a_deletion(a_Array *arr, uint64_t index)
     {
         if(each >= index)
         {
-            arr->array[each] = arr->array[each + 1];
+            arr->element[each] = arr->element[each + 1];
         }
     }
 }
@@ -110,7 +92,7 @@ void a_search(a_Array *arr, uint64_t index)
     }
 
     printf("\n%s", "> a_search: The data of the element corresponding the index is as following:");
-    output_data(&arr->array[index]);
+    output_data(&arr->element[index]);
 }
 
 //update an element at a specific index.
@@ -124,7 +106,7 @@ void a_update(a_Array *arr, uint64_t index)
     }
 
     printf("\n%s", "> a_update: Please set the data for the element:");
-    input_data(&arr->array[index]);
+    input_data(&arr->element[index]);
 }
 
 void a_is_empty(a_Array *arr)
@@ -147,9 +129,13 @@ void a_is_full(a_Array *arr)
     printf("\n%s", "> a_is_full: The array is not full now.");
 }
 
+
+
+//The implementation of the internal function.
 static inline void input_data(a_Data *element)
 {
     scanf("%lf", &element->data);
+    getchar();
 }
 
 static inline void output_data(a_Data *element)
