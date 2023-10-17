@@ -7,7 +7,7 @@
 
 //The interface of the internal function.
 static inline void  input_data  (a_Data *);
-static inline void  output_data (a_Data *);
+static inline void  output_data (a_Data);
 static bool         is_empty    (a_Array *);
 static bool         is_full     (a_Array *);
 
@@ -92,7 +92,7 @@ void a_search(a_Array *arr, uint64_t index)
     }
 
     printf("\n%s", "> a_search: The data of the element corresponding the index is as following:");
-    output_data(&arr->element[index]);
+    output_data(arr->element[index]);
 }
 
 //update an element at a specific index.
@@ -114,9 +114,11 @@ void a_is_empty(a_Array *arr)
     if(arr->length == 0)
     {
         printf("\n%s", "> a_is_empty: The array is empty now.");
-        return;
     }
-    printf("\n%s", "> a_is_empty: The array is not empty now.");
+    else
+    {
+        printf("\n%s", "> a_is_empty: The array is not empty now.");
+    }
 }
 
 void a_is_full(a_Array *arr)
@@ -124,9 +126,11 @@ void a_is_full(a_Array *arr)
     if(arr->length == ARRAY_MAX_SIZE)
     {
         printf("\n%s", "> a_is_full: The array is full now.");
-        return;
     }
-    printf("\n%s", "> a_is_full: The array is not full now.");
+    else
+    {
+        printf("\n%s", "> a_is_full: The array is not full now.");
+    }
 }
 
 
@@ -138,9 +142,9 @@ static inline void input_data(a_Data *element)
     getchar();
 }
 
-static inline void output_data(a_Data *element)
+static inline void output_data(a_Data element)
 {
-    printf(" %lf", element->data);
+    printf(" %lf", element.data);
 }
 
 static inline bool is_empty(a_Array *arr)
@@ -149,7 +153,10 @@ static inline bool is_empty(a_Array *arr)
     {
         return 1;
     }
-    return 0;
+    else
+    {
+        return 0;
+    }
 }
 
 static inline bool is_full(a_Array *arr)
@@ -158,5 +165,8 @@ static inline bool is_full(a_Array *arr)
     {
         return 1;
     }
-    return 0;
+    else
+    {
+        return 0;
+    }
 }

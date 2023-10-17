@@ -22,16 +22,22 @@ typedef struct List_Stack_s
 
 
 
-void a_s_peek       (a_Stack *);
-void a_s_pop        (a_Stack *);
-void a_s_push       (a_Stack *);
-void a_s_is_empty   (a_Stack *);
-void a_s_is_full    (a_Stack *);
+void a_s_construction   (a_Stack *);
+void a_s_destruction    (a_Stack *);
+void a_s_peek           (a_Stack *);
+void a_s_pop            (a_Stack *);
+void a_s_push           (a_Stack *);
+void a_s_is_empty       (a_Stack *);
+void a_s_is_full        (a_Stack *);
+void a_s_print          (a_Stack *);
 
-void l_s_peek       (l_Stack *);
-void l_s_pop        (l_Stack *);
-void l_s_push       (l_Stack *);
-void l_s_is_empty   (l_Stack *);
-void l_s_is_full    (l_Stack *);
+void l_s_construction   (l_Stack *);
+void l_s_destruction    (l_Stack *);
+void l_s_peek           (l_Stack *);
+void l_s_pop            (l_Stack *);
+void l_s_push           (l_Stack *);
+void l_s_is_empty       (l_Stack *);
+void l_s_is_full        (l_Stack *);
+void l_s_print          (l_Stack *);
 
 #endif
