@@ -55,16 +55,14 @@ typedef struct Linked_List_s
     enum   LinkedListType      type;
     struct Linked_List_Node_s *head;
     struct Linked_List_Node_s *tail;
-    
-    struct Linked_List_Node_s *previous;
     struct Linked_List_Node_s *current;
-    struct Linked_List_Node_s *temporary;
 } l_List;
 /*Constructing compound linked list type, then setting the mode by variable *type* . */
 /*The *head node* means the start of the linked list. */
 /*The *tail node* means the end of the linked list. */
 /*Temporary node type:
- *The *previous node* , *current node* , and *temporary node* record the status of the node.
+ *The *previous node* , *current node* , and *temporary node* record the status of the node,
+ *you can only use the foremost one whem you construct the doubly linked list.
  *The *sentinel node* means the check point of the linked list. */
 /*Special operational node type (not in the structure):
  *The *dummy node* can avoid the special operation to the head node.
@@ -77,21 +75,22 @@ typedef struct Linked_List_s
 
 
 //Function prototype for operation of linked list:
-int8_t l_control_table  (l_List *);
+int8_t   l_control_table    (l_List *);
+l_List * l_initialization   (void);
 
 void l_construction     (l_List *);
 void l_insertion        (l_List *, uint64_t);
 void l_insert_head      (l_List *);
 void l_insert_tail      (l_List *);
 
-//void l_destruction      (l_List *);
+void l_destruction      (l_List *);
 //void l_deletion         (l_List *, uint64_t);
 //void l_delete_head      (l_List *);
 //void l_delete_tail      (l_List *);
 
 //Useful operation and algorithm based on divergent linked list type.
-//void l_search           (l_List *, uint64_t);
-//void l_display          (l_List *);
+void l_search           (l_List *, uint64_t);
+void l_display          (l_List *);
 //void l_sort             (l_List *);
 //void l_reverse          (l_List *);
 void l_is_empty         (l_List *);
