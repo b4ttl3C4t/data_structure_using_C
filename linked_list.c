@@ -176,7 +176,7 @@ void l_construction(l_List *list)
 
     //Initializing the value of *size*.
     printf("\n%s", "> l_construction: Enter the size you to initialize the linked list.");
-    do
+    while(1)
     {
         if(scanf("%llu", &list->size) != 0 && list->size != 0)
         {
@@ -186,35 +186,46 @@ void l_construction(l_List *list)
         
         getchar();
         fprintf(stderr, "\n%s%s", "> l_construction: ", WRONG_INPUT);
-    } while(1);
+    }
 
     //Constructing the linked list based on the value of *size*.
+    list->head = (l_Node *)malloc(sizeof(l_Node));  //The data for the head node is inaccessible.
+    list->head->next = NULL;
+    list->head->prev = NULL;
+    list->current = list->head;
+
     for(index = 0; index < list->size; ++index)
     {
-        new      = (l_Node *)malloc(sizeof(l_Node));
-        new_data = (l_Data *)malloc(sizeof(l_Data));
-        if(new == NULL || new_data == NULL)
+        list->current->next       = (l_Node *)malloc(sizeof(l_Node));
+        if(list->current->next == NULL)
         {
             fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
             return;
         }
 
-        new->data  = new_data;
-        list->tail = new;
-        input_data(list->type, new);
-
-        if(is_first_flag)
+        list->current->next->data = (l_Data *)malloc(sizeof(l_Data));
+        if(list->current->next->data == NULL)
         {
-            is_first_flag = 0;
-            list->head = new;
+            fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
+            return;
         }
+        input_data(list->type, list->current->next);
+
+        list->current->next->prev = list->current;
+        list->current->next->next = list->head;
     }
 }
 
 //Insert the new node to the previous one of the given index.
 void l_insertion(l_List *list, uint64_t index)
 {
-    if(is_empty(list) || index == 0)
+    if(is_empty(list))
+    {
+        l_construction(list);
+        return;
+    }
+
+    if(index == 0)
     {
         l_insert_head(list);
         return;
@@ -277,7 +288,7 @@ void l_destruction(l_List *list)
         return;
     }
 
-    list->current = list->head;
+    list->current = list->head->next;
     for(index = 0; index < list->size; ++index)
     {
         list->current = list->current->next;
@@ -308,7 +319,7 @@ void l_search(l_List *list, uint64_t index)
         list->current = list->current->next;
     }
 
-    if((list->current == list->tail) && (index != 0))
+    if((list->current == list->head) && (index != 0))
     {
         fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
         return;
@@ -319,7 +330,44 @@ void l_search(l_List *list, uint64_t index)
 
 void l_display(l_List *list)
 {
+    if(is_empty(list))
+    {
+        fprintf(stderr, "\n%s%s", "> l_display: ", DESTRUCT_MESSAGE);
+        return;
+    }
+    
+    list->current = list->head->next;
+    while(list->current != list->head)
+    {
+        output_data(list->type, list->current);
+        list->current = list->current->next;
+    }
+}
 
+void l_reverse(l_List *list)
+{
+    if(is_empty(list))
+    {
+        fprintf(stderr, "\n%s%s", "> l_reverse: ", DESTRUCT_MESSAGE);
+        return;
+    }
+
+    if(list->size == 1)
+    {
+        printf("\n%s", "> l_reverse: The list has already resort.");
+        return;
+    }
+
+    uint64_t i;
+    list->current = list->head->next;
+    for(i = 0; i < list->size; ++i)
+    {
+        list->current->prev->next = list->current->prev->prev;
+
+    }
+    list->head = list->current;
+
+    printf("\n%s", "> l_reverse: The list has already resort.");
 }
 
 void l_is_empty(l_List *list)
@@ -414,7 +462,7 @@ static l_Node * search_node(l_List *list, uint64_t index)
         list->current = list->current->next;
     }
 
-    if((list->current == list->tail) && (index != 0))
+    if((list->current == list->head) && (index != 0))
     {
         return NULL;
     }

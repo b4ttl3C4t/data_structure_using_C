@@ -54,12 +54,12 @@ typedef struct Linked_List_s
     uint64_t                   size;
     enum   LinkedListType      type;
     struct Linked_List_Node_s *head;
-    struct Linked_List_Node_s *tail;
     struct Linked_List_Node_s *current;
 } l_List;
 /*Constructing compound linked list type, then setting the mode by variable *type* . */
-/*The *head node* means the start of the linked list. */
-/*The *tail node* means the end of the linked list. */
+/*The *head node* means the start of the linked list.
+ *The *tail node* means the end of the linked list. 
+ *it's a circular linked list, so there is no need for *tail node*. */
 /*Temporary node type:
  *The *previous node* , *current node* , and *temporary node* record the status of the node,
  *you can only use the foremost one whem you construct the doubly linked list.
@@ -91,8 +91,7 @@ void l_destruction      (l_List *);
 //Useful operation and algorithm based on divergent linked list type.
 void l_search           (l_List *, uint64_t);
 void l_display          (l_List *);
-//void l_sort             (l_List *);
-//void l_reverse          (l_List *);
+void l_reverse          (l_List *);
 void l_is_empty         (l_List *);
 /*
 //The following algorithm is only for polynomial linked list.
