@@ -84,9 +84,9 @@ void l_insert_head      (l_List *);
 void l_insert_tail      (l_List *);
 
 void l_destruction      (l_List *);
-//void l_deletion         (l_List *, uint64_t);
-//void l_delete_head      (l_List *);
-//void l_delete_tail      (l_List *);
+void l_deletion         (l_List *, uint64_t);
+void l_delete_head      (l_List *);
+void l_delete_tail      (l_List *);
 
 //Useful operation and algorithm based on divergent linked list type.
 void l_search           (l_List *, uint64_t);
