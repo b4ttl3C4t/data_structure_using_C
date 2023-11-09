@@ -148,14 +148,19 @@ l_List * l_initialization(void)
                             "  | 1 | polynomial linked list |");
     
     //Probing whether the type mode is correct.
+    //Interface for setting mode.
+    printf("\n%s", "> l_initialization: Please set the type mode for the head node:");
     while(list->type >= LIST_TYPE_SIZE)
     {
-        //Interface for setting mode.
-        printf("\n%s", "> l_initialization: Please set the type mode for the head node:");
-        scanf("%llu", list->type);
+        if(scanf("%llu", list->type) == 1)
+        {
+            getchar();
+            break;
+        }
+        
         getchar();
-
-        if()
+        fprintf(stderr, "\n%s%s", "> l_initialization: ", MODE_ERROR);
+        printf("\n%s", "> l_initialization: Please set the type mode again:");
     }
 
     return list;
