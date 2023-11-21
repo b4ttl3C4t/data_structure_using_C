@@ -1,7 +1,7 @@
 #include "linked_list.h"
 
 #define LIST_TYPE_SIZE  2
-#define OPCODE_SIZE     14
+#define OPCODE_SIZE     13
 
 #define MALLOC_ERROR        "The memory allocation for linked list aborts."
 #define MODE_ERROR          "The mode is not accessible."
@@ -36,7 +36,7 @@ int8_t l_control_table(l_List *list)
 
     printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
                         "> l_control_table: ",
-                        "  |code|    function    |",
+                        "  |code|     function     |",
                         "  |  0 | l_construction   |",
                         "  |  1 | l_insertion      |",
                         "  |  2 | l_insert_head    |",
@@ -47,15 +47,14 @@ int8_t l_control_table(l_List *list)
                         "  |  7 | l_delete_tail    |",
                         "  |  8 | l_search         |",
                         "  |  9 | l_display        |",
-                        "  | 10 | l_sort           |",
-                        "  | 11 | l_reverse        |",
-                        "  | 12 | l_is_empty       |",
-                        "  | 13 |       EXIT       |",
+                        "  | 10 | l_reverse        |",
+                        "  | 11 | l_is_empty       |",
+                        "  | 12 |       EXIT       |",
                         "> l_control_table: What do you want to do now? Please enter the opcode:");
     scanf("%llu", &opcode);
     getchar();
 
-    if(opcode == 13)
+    if(opcode == 12)
     {
         printf("\n%s", "> l_control_table: Exiting the program operation...");
         return false;
@@ -73,6 +72,7 @@ int8_t l_control_table(l_List *list)
         break;
 
     case 1:
+        printf("%s", "> l_control_table: Please enter the index: ");
         scanf("%llu", &index);
         getchar();
         l_insertion(list, index);
@@ -91,6 +91,7 @@ int8_t l_control_table(l_List *list)
         break;
     
     case 5:
+        printf("%s", "> l_control_table: Please enter the index: ");
         scanf("%llu", &index);
         getchar();
         l_deletion(list, index);
@@ -105,6 +106,7 @@ int8_t l_control_table(l_List *list)
         break;
 
     case 8:
+        printf("%s", "> l_control_table: Please enter the index: ");
         scanf("%llu", &index);
         getchar();
         l_search(list, index);
@@ -113,16 +115,12 @@ int8_t l_control_table(l_List *list)
     case 9:
         l_display(list);
         break;
-
-    case 10:
-        l_sort(list);
-        break;
     
-    case 11:
+    case 10:
         l_reverse(list);
         break;
 
-    case 12:
+    case 11:
         l_is_empty(list);
         break;
     }
@@ -141,6 +139,7 @@ l_List * l_initialization(void)
         fprintf(stderr, "\n%s%s", "> initialization: ", MALLOC_ERROR);
         return NULL;
     }
+    list->head = NULL;
 
     printf("\n%s", "> l_initialization: The memory allocation completes!");
     printf("\n%s\n%s\n%s",  "> l_initialization: Type mode table as following:",
@@ -150,28 +149,26 @@ l_List * l_initialization(void)
     //Probing whether the type mode is correct.
     //Interface for setting mode.
     printf("\n%s", "> l_initialization: Please set the type mode for the head node:");
+    
+    scanf("%llu", &list->type);
+    getchar();
+
     while(list->type >= LIST_TYPE_SIZE)
     {
-        if(scanf("%llu", list->type) == 1)
-        {
-            getchar();
-            break;
-        }
-        
-        getchar();
         fprintf(stderr, "\n%s%s", "> l_initialization: ", MODE_ERROR);
         printf("\n%s", "> l_initialization: Please set the type mode again:");
+
+        scanf("%llu", &list->type);
+        getchar();
     }
+
+    list->size = 0;
 
     return list;
 }
 
 void l_construction(l_List *list)
 {
-    uint32_t index, is_first_flag = 1;
-    l_Node * new;
-    l_Data * new_data;
-
     if(!is_empty(list))
     {
         fprintf(stderr, "\n%s%s", "> l_construction: ", CONSTRUCT_MESSAGE);
@@ -179,7 +176,7 @@ void l_construction(l_List *list)
     }
 
     //Initializing the value of *size*.
-    printf("\n%s", "> l_construction: Enter the size you to initialize the linked list.");
+    printf("\n%s", "> l_construction: Enter the size you to initialize the linked list:");
     while(1)
     {
         if(scanf("%llu", &list->size) != 0 && list->size != 0)
@@ -196,28 +193,30 @@ void l_construction(l_List *list)
     //The data for the head node is inaccessible.
     list->head->next = list->head;
     list->head->prev = list->head;
-    list->current    = list->head;
+    list->curr       = list->head;
 
     //Constructing the linked list based on the value of *size*.
+    uint32_t index;
     for(index = 0; index < list->size; ++index)
     {
-        list->current->next       = (l_Node *)malloc(sizeof(l_Node));
-        if(list->current->next == NULL)
+        list->curr->next = (l_Node *)malloc(sizeof(l_Node));
+        if(list->curr->next == NULL)
         {
             fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
             return;
         }
 
-        list->current->next->data = (l_Data *)malloc(sizeof(l_Data));
-        if(list->current->next->data == NULL)
+        list->curr->next->data = (l_Data *)malloc(sizeof(l_Data));
+        if(list->curr->next->data == NULL)
         {
             fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
             return;
         }
-        input_data(list->type, list->current->next);
+        input_data(list->type, list->curr->next);
 
-        list->current->next->prev = list->current;
-        list->current->next->next = list->head;
+        list->curr->next->prev = list->curr;
+        list->curr->next->next = list->head;
+        list->curr = list->curr->next;
     }
 }
 
@@ -231,19 +230,19 @@ void l_insertion(l_List *list, uint64_t index)
         return;
     }
 
-    list->current = search_node(list, index);
-    if(list->current == NULL)
+    list->curr = search_node(list, index);
+    if(list->curr == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_insertion: ", INDEX_ERROR);
         return;
     }
 
-    //Constructing the linkage of the *current* node between the prev and next one.
-    list->current->prev->next       = (l_Node *)malloc(sizeof(l_Node));
-    list->current->prev->next->prev = list->current->prev;
-    list->current->prev->next->next = list->current;
-    list->current->prev             = list->current->prev->next;
-    input_data(list->type, list->current->prev->next);
+    //Constructing the linkage of the *curr* node between the prev and next one.
+    list->curr->prev->next       = (l_Node *)malloc(sizeof(l_Node));
+    list->curr->prev->next->prev = list->curr->prev;
+    list->curr->prev->next->next = list->curr;
+    list->curr->prev             = list->curr->prev->next;
+    input_data(list->type, list->curr->prev->next);
     
     ++(list->size);
 }
@@ -260,22 +259,21 @@ void l_insert_tail(l_List *list)
 
 void l_destruction(l_List *list)
 {
-    uint32_t index;
-
     if(is_empty(list))
     {
         fprintf(stderr, "\n%s%s", "> l_destruction: ", DESTRUCT_MESSAGE);
         return;
     }
 
-    list->current = list->head->next;
-    for(index = 0; index < list->size; ++index)
+    
+    for(list->curr  = list->head->next; 
+        list->curr != list->head; 
+        list->curr  = list->curr->next)
     {
-        list->current = list->current->next;
-        free(list->current->prev->data);
-        free(list->current->prev);
+        free(list->curr->prev->data);
+        free(list->curr->prev);
     }
-    free(list->current);
+    free(list->curr);
     free(list);
 }
 
@@ -287,17 +285,17 @@ void l_deletion(l_List *list, uint64_t index)
         return;
     };
 
-    list->current = search_node(list, index);
-    if(list->current == NULL)
+    list->curr = search_node(list, index);
+    if(list->curr == NULL)
     {
-        fprintf(stderr, "\n%s%s", "> l_insertion: ", INDEX_ERROR);
+        fprintf(stderr, "\n%s%s", "> l_deletion: ", INDEX_ERROR);
         return;
     }
 
-    free(list->current->data);
-    list->current->prev->next = list->current->next;
-    list->current->next->prev = list->current->prev;
-    free(list->current);
+    free(list->curr->data);
+    list->curr->prev->next = list->curr->next;
+    list->curr->next->prev = list->curr->prev;
+    free(list->curr);
     --(list->size);
 }
 
@@ -325,19 +323,19 @@ void l_search(l_List *list, uint64_t index)
         return;
     }
 
-    list->current = list->head->next;
-    while((list->current != list->head) && (index-- != 0))
+    list->curr = list->head->next;
+    while((list->curr != list->head) && (index-- != 0))
     {
-        list->current = list->current->next;
+        list->curr = list->curr->next;
     }
 
-    if((list->current == list->head) && (index != 0))
+    if((list->curr == list->head) && (index != 0))
     {
         fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
         return;
     }
 
-    output_data(list->type, list->current);
+    output_data(list->type, list->curr);
 }
 
 void l_display(l_List *list)
@@ -347,12 +345,12 @@ void l_display(l_List *list)
         fprintf(stderr, "\n%s%s", "> l_display: ", DESTRUCT_MESSAGE);
         return;
     }
-    
-    list->current = list->head->next;
-    while(list->current != list->head)
+
+    list->curr = list->head->next;
+    while(list->curr != list->head)
     {
-        output_data(list->type, list->current);
-        list->current = list->current->next;
+        output_data(list->type, list->curr);
+        list->curr = list->curr->next;
     }
 }
 
@@ -366,31 +364,34 @@ void l_reverse(l_List *list)
 
     if(list->size == 1)
     {
-        printf("\n%s", "> l_reverse: The list has already resort.");
+        printf("\n%s", "> l_reverse: The list has already reversed.");
         return;
     }
 
-    uint64_t i;
-    list->current = list->head->next;
-    for(i = 0; i < list->size; ++i)
+    uint64_t index;
+    list->curr = list->head->next;
+    for(index = 0; index < list->size; ++index)
     {
-        list->current->prev->next = list->current->prev->prev;
+        list->curr->prev->next = list->curr->prev->prev;
+        list->curr->next->prev = list->curr->next->next;
 
+        list->curr = list->curr->next;
     }
-    list->head = list->current;
 
-    printf("\n%s", "> l_reverse: The list has already resort.");
+    printf("\n%s", "> l_reverse: The list has already reversed.");
 }
 
 void l_is_empty(l_List *list)
 {
-    if(list->head == NULL)
+    if(list->head == NULL || list->size == 0)
     {
         printf("\n%s", "> l_is_empty: The list is empty.");
     }
     else
     {
-        printf("\n%s", "> l_is_empty: The list is not empty.");
+        printf("\n%s", "> l_is_empty: The list is not empty, "
+                                     "the size of the list is %llu.", 
+                                     list->size);
     }
 }
 
@@ -404,12 +405,12 @@ static void input_data(enum LinkedListType type, l_Node *node)
         fprintf(stderr, "\n%s%s", "> input_data: ", INDEX_ERROR);
         return;
     }
-
-    printf("\n%s", "> input_data: Please enter the data:");
+    
     while(type == normal)
     {
+        printf("\n%s", "> input_data: Please enter the data:");
         
-        if(scanf("%d", node->data->default_data.integer) == 1)
+        if(scanf("%d", &node->data->default_data.integer) == 1)
         {
             getchar();
             return;
@@ -420,10 +421,11 @@ static void input_data(enum LinkedListType type, l_Node *node)
         printf("\n%s", "> input_data: Please enter again:");
     }
 
-    printf("\n%s", "> input_data: Please enter the data:");
     while(type == polynomial)
     {
-        if(scanf("%lf%llu", node->data->polynomial.coefficient, node->data->polynomial.power) == 2)
+        printf("\n%s", "> input_data: Please enter the coefficient and the power:");
+
+        if(scanf("%lf", &node->data->polynomial.coefficient) == 1 && scanf("%llu", &node->data->polynomial.power) == 1)
         {
             getchar();
             return;
@@ -445,14 +447,14 @@ static void output_data(enum LinkedListType type, l_Node *node)
 
     if(type == normal)
     {
-        printf("%d", node->data->default_data.integer);
+        printf("%d ", node->data->default_data.integer);
         return;
     }
 
     if(type == polynomial)
     {
-        printf("%d%d",  node->data->polynomial.coefficient,
-                        node->data->polynomial.power);
+        printf("%lfx^%llu +",   node->data->polynomial.coefficient,
+                                node->data->polynomial.power);
         return;
     }
 }
@@ -470,24 +472,24 @@ static l_Node * search_node(l_List *list, uint64_t index)
         return NULL;
     }
 
-    list->current = list->head->next;
-    while((list->current != list->head) && (index-- != 0))
+    list->curr = list->head->next;
+    while((list->curr != list->head) && (index-- != 0))
     {
-        list->current = list->current->next;
+        list->curr = list->curr->next;
     }
 
-    if((list->current == list->head) && (index != 0))
+    if((list->curr == list->head) && (index != 0))
     {
         return NULL;
     }
 
-    return list->current;
+    return list->curr;
 }
 
 //The function is not equal to *l_is_empty* , it returns boolean value instead.
 static bool is_empty(l_List *list)
 {
-    if(list->head == NULL)
+    if(list->head == NULL || list->size == 0)
     {
         return 1;
     }

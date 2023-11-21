@@ -54,14 +54,15 @@ typedef struct Linked_List_s
     uint64_t                   size;
     enum   LinkedListType      type;
     struct Linked_List_Node_s *head;
-    struct Linked_List_Node_s *current;
+    struct Linked_List_Node_s *curr;
+    struct Linked_List_Node_s *temp;
 } l_List;
 /*Constructing compound linked list type, then setting the mode by variable *type* . */
 /*The *head node* means the start of the linked list.
  *The *tail node* means the end of the linked list. 
  *it's a circular linked list, so there is no need for *tail node*. */
 /*Temporary node type:
- *The *previous node* , *current node* , and *temporary node* record the status of the node,
+ *The *previous node* , *curr node* , and *temporary node* record the status of the node,
  *you can only use the foremost one whem you construct the doubly linked list.
  *The *sentinel node* means the check point of the linked list. */
 /*Special operational node type (not in the structure):
