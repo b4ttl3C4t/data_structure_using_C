@@ -188,9 +188,9 @@ void l_construction(l_List *list)
         getchar();
         fprintf(stderr, "\n%s%s", "> l_construction: ", WRONG_INPUT);
     }
-    
-    list->head       = (l_Node *)malloc(sizeof(l_Node));
-    if(list->curr->next == NULL)
+
+    list->head = (l_Node *)malloc(sizeof(l_Node));
+    if(list->head == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
         return;
@@ -222,23 +222,8 @@ void l_construction(l_List *list)
         (list->curr->next)->prev = list->curr;
         (list->curr->next)->next = list->head;
         list->curr = (list->curr->next);
-        list->head->prev = list->curr;
     }
-
-///////////////////
-    list->curr = list->head->next;
-    while(list->curr != list->head)
-    {
-        output_data(list->type, list->curr);
-        list->curr = list->curr->next;
-    }
-
-    list->curr = list->head->prev;
-    while(list->curr != list->head)
-    {
-        output_data(list->type, list->curr);
-        list->curr = list->curr->prev;
-    }
+    list->head->prev = list->curr;
 }
 
 //Insert the new node to the previous one of the given index.
@@ -404,7 +389,7 @@ void l_reverse(l_List *list)
     }
 
     uint64_t index;
-    list->curr = list->head;
+    list->curr = list->head->next;
     for(index = 0; index < list->size; ++index)
     {
         list->temp       = list->curr->next;
