@@ -190,6 +190,11 @@ void l_construction(l_List *list)
     }
     
     list->head       = (l_Node *)malloc(sizeof(l_Node));
+    if(list->curr->next == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
+        return;
+    }
     //The data for the head node is inaccessible.
     list->head->next = list->head;
     list->head->prev = list->head;
@@ -199,24 +204,40 @@ void l_construction(l_List *list)
     uint32_t index;
     for(index = 0; index < list->size; ++index)
     {
-        list->curr->next = (l_Node *)malloc(sizeof(l_Node));
-        if(list->curr->next == NULL)
+        (list->curr->next) = (l_Node *)malloc(sizeof(l_Node));
+        if((list->curr->next) == NULL)
         {
             fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
             return;
         }
 
-        list->curr->next->data = (l_Data *)malloc(sizeof(l_Data));
-        if(list->curr->next->data == NULL)
+        (list->curr->next)->data = (l_Data *)malloc(sizeof(l_Data));
+        if((list->curr->next)->data == NULL)
         {
             fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
             return;
         }
-        input_data(list->type, list->curr->next);
+        input_data(list->type, (list->curr->next));
 
-        list->curr->next->prev = list->curr;
-        list->curr->next->next = list->head;
+        (list->curr->next)->prev = list->curr;
+        (list->curr->next)->next = list->head;
+        list->curr = (list->curr->next);
+        list->head->prev = list->curr;
+    }
+
+///////////////////
+    list->curr = list->head->next;
+    while(list->curr != list->head)
+    {
+        output_data(list->type, list->curr);
         list->curr = list->curr->next;
+    }
+
+    list->curr = list->head->prev;
+    while(list->curr != list->head)
+    {
+        output_data(list->type, list->curr);
+        list->curr = list->curr->prev;
     }
 }
 
@@ -231,6 +252,7 @@ void l_insertion(l_List *list, uint64_t index)
     }
 
     list->curr = search_node(list, index);
+
     if(list->curr == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_insertion: ", INDEX_ERROR);
@@ -238,12 +260,25 @@ void l_insertion(l_List *list, uint64_t index)
     }
 
     //Constructing the linkage of the *curr* node between the prev and next one.
-    list->curr->prev->next       = (l_Node *)malloc(sizeof(l_Node));
-    list->curr->prev->next->prev = list->curr->prev;
-    list->curr->prev->next->next = list->curr;
-    list->curr->prev             = list->curr->prev->next;
-    input_data(list->type, list->curr->prev->next);
+    (list->curr->prev->next) = (l_Node *)malloc(sizeof(l_Node));
+    if((list->curr->prev->next) == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_insertion: ", MALLOC_ERROR);
+        return;
+    }
+
+    (list->curr->prev->next)->prev = list->curr->prev;
+    (list->curr->prev->next)->next = list->curr;
+    list->curr->prev               = (list->curr->prev->next);
     
+    (list->curr->prev->next)->data = (l_Data *)malloc(sizeof(l_Data));
+    if((list->curr->prev->next)->data == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_insertion: ", MALLOC_ERROR);
+        return;
+    }
+    input_data(list->type, (list->curr->prev->next));
+
     ++(list->size);
 }
 
@@ -369,13 +404,14 @@ void l_reverse(l_List *list)
     }
 
     uint64_t index;
-    list->curr = list->head->next;
+    list->curr = list->head;
     for(index = 0; index < list->size; ++index)
     {
-        list->curr->prev->next = list->curr->prev->prev;
-        list->curr->next->prev = list->curr->next->next;
+        list->temp       = list->curr->next;
+        list->curr->next = list->curr->prev;
+        list->curr->prev = list->temp;
 
-        list->curr = list->curr->next;
+        list->curr = list->temp;
     }
 
     printf("\n%s", "> l_reverse: The list has already reversed.");
@@ -389,8 +425,8 @@ void l_is_empty(l_List *list)
     }
     else
     {
-        printf("\n%s", "> l_is_empty: The list is not empty, "
-                                     "the size of the list is %llu.", 
+        printf("\n%s%llu", "> l_is_empty: The list is not empty, "
+                                     "the size of the list is", 
                                      list->size);
     }
 }
@@ -453,7 +489,7 @@ static void output_data(enum LinkedListType type, l_Node *node)
 
     if(type == polynomial)
     {
-        printf("%lfx^%llu +",   node->data->polynomial.coefficient,
+        printf("%lfx^%llu + ",  node->data->polynomial.coefficient,
                                 node->data->polynomial.power);
         return;
     }
@@ -473,7 +509,7 @@ static l_Node * search_node(l_List *list, uint64_t index)
     }
 
     list->curr = list->head->next;
-    while((list->curr != list->head) && (index-- != 0))
+    while((list->curr != list->head) && (--index != 0))
     {
         list->curr = list->curr->next;
     }
