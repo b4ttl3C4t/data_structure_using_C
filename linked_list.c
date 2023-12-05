@@ -237,7 +237,6 @@ void l_insertion(l_List *list, uint64_t index)
     }
 
     list->curr = search_node(list, index);
-
     if(list->curr == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_insertion: ", INDEX_ERROR);
@@ -245,24 +244,27 @@ void l_insertion(l_List *list, uint64_t index)
     }
 
     //Constructing the linkage of the *curr* node between the prev and next one.
-    (list->curr->prev->next) = (l_Node *)malloc(sizeof(l_Node));
-    if((list->curr->prev->next) == NULL)
+    (list->temp) = (l_Node *)malloc(sizeof(l_Node));
+    if((list->temp) == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_insertion: ", MALLOC_ERROR);
         return;
     }
-
-    (list->curr->prev->next)->prev = list->curr->prev;
-    (list->curr->prev->next)->next = list->curr;
-    list->curr->prev               = (list->curr->prev->next);
     
-    (list->curr->prev->next)->data = (l_Data *)malloc(sizeof(l_Data));
-    if((list->curr->prev->next)->data == NULL)
+    (list->temp)->data = (l_Data *)malloc(sizeof(l_Data));
+    if((list->temp)->data == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_insertion: ", MALLOC_ERROR);
         return;
     }
-    input_data(list->type, (list->curr->prev->next));
+    input_data(list->type, (list->temp));
+
+    //Modify *list->curr->prev* firstly, then fine-tune the *list->curr* .
+    (list->temp)->prev       = (list->curr->prev);
+    (list->curr->prev)->next = (list->temp);
+
+    (list->temp)->next       = (list->curr);
+    (list->curr)->prev       = (list->temp);
 
     ++(list->size);
 }
@@ -390,7 +392,7 @@ void l_reverse(l_List *list)
 
     uint64_t index;
     list->curr = list->head->next;
-    for(index = 0; index < list->size; ++index)
+    for(index = 0; index <= list->size; ++index)
     {
         list->temp       = list->curr->next;
         list->curr->next = list->curr->prev;
