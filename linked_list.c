@@ -34,7 +34,7 @@ int8_t l_control_table(l_List *list)
 {
     static uint64_t index, opcode;
 
-    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
                         "> l_control_table: ",
                         "  |code|     function     |",
                         "  |  0 | l_construction   |",
@@ -276,7 +276,27 @@ void l_insert_head(l_List *list)
 
 void l_insert_tail(l_List *list)
 {
-    l_insertion(list, list->size);
+    (list->temp) = (l_Node *)malloc(sizeof(l_Node));
+    if((list->temp) == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
+        return;
+    }
+
+    (list->temp)->data = (l_Data *)malloc(sizeof(l_Data));
+    if((list->temp)->data == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
+        return;
+    }
+    input_data(list->type, (list->temp));
+
+    (list->temp)->prev = (list->head)->prev;
+    (list->temp)->next = (list->head);
+    (list->head)->prev->next = (list->temp);
+    (list->head)->prev = (list->temp);
+
+    ++list->size;
 }
 
 void l_destruction(l_List *list)
