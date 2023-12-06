@@ -1,5 +1,5 @@
 #include "linked_list.h"
-//printf("adsffffff|%u %u|", index, list->size);
+
 #define LIST_TYPE_SIZE  2
 #define OPCODE_SIZE     13
 
@@ -50,7 +50,7 @@ int main(void)
 
 int8_t l_control_table(l_List *list)
 {
-    static uint64_t index, opcode;
+    static uint64_t opcode;
 
     printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
                         "> l_control_table: ",
@@ -347,7 +347,19 @@ void l_deletion(l_List *list)
     }
     getchar();
 
-    list->curr = search_node(list, index);
+    if(index == 0)
+    {
+        l_delete_head(list);
+        return;
+    }
+
+    if(index == list->size - 1)
+    {
+        l_delete_tail(list);
+        return;
+    }
+    
+    list->curr = search_node(list, index + 1);
     
     if(list->curr == NULL)
     {
@@ -364,12 +376,36 @@ void l_deletion(l_List *list)
 
 void l_delete_head(l_List *list)
 {
-    l_deletion(list);
+    if(is_empty(list))
+    {
+        fprintf(stderr, "\n%s%s", "> l_delete_head: ", DESTRUCT_MESSAGE);
+        return;
+    }
+
+    (list->curr) = list->head->next;
+    free((list->curr)->data);
+    (list->curr)->next->prev = (list->head);
+    (list->head)->next = (list->curr)->next;
+    free((list->curr));
+
+    --(list->size);
 }
 
 void l_delete_tail(l_List *list)
 {
-    l_deletion(list);
+    if(is_empty(list))
+    {
+        fprintf(stderr, "\n%s%s", "> l_delete_head: ", DESTRUCT_MESSAGE);
+        return;
+    }
+
+    (list->curr) = list->head->prev;
+    free((list->curr)->data);
+    (list->curr)->prev->next = (list->head);
+    (list->head)->prev = (list->curr)->prev;
+    free((list->curr));
+
+    --(list->size);
 }
 
 void l_search(l_List *list)
@@ -550,7 +586,6 @@ static l_Node * search_node(l_List *list, uint64_t index)
     
     if(index >= list->size)
     {
-        fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
         return NULL;
     }
     
