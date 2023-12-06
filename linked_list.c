@@ -1,5 +1,5 @@
 #include "linked_list.h"
-
+//printf("adsffffff|%u %u|", index, list->size);
 #define LIST_TYPE_SIZE  2
 #define OPCODE_SIZE     13
 
@@ -44,6 +44,8 @@ int main(void)
 
     while(l_control_table(list));
     //Not breaking the loop until l_control_table appear *opcode 13 (EXIT)*.
+    free(list);
+    list = NULL;
 }
 
 int8_t l_control_table(l_List *list)
@@ -82,7 +84,7 @@ int8_t l_control_table(l_List *list)
     }
 
     CONTROL_TABLE[opcode](list);
-
+    
     return true;
 }
 
@@ -212,7 +214,7 @@ void l_insertion(l_List *list)
         return;
     }
 
-    if(index == list->size)
+    if(index == list->size - 1)
     {
         l_insert_tail(list);
         return;
@@ -314,12 +316,16 @@ void l_destruction(l_List *list)
         list->curr != list->head; 
         list->curr  = list->curr->next)
     {
-        free(list->curr->prev->data);
-        free(list->curr->prev);
+        free(list->curr->data);
+        list->curr->prev->next = list->curr->next;
+        list->curr->next->prev = list->curr->prev;
+        free(list->curr);
+        --(list->size);
     }
-    free(list->curr);
-    free(list);
-    list = NULL;
+    free(list->head);
+    list->head = NULL;
+
+    if(is_empty(list)) printf("ABC");
 }
 
 void l_deletion(l_List *list)
@@ -342,6 +348,7 @@ void l_deletion(l_List *list)
     getchar();
 
     list->curr = search_node(list, index);
+    
     if(list->curr == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_deletion: ", INDEX_ERROR);
@@ -375,16 +382,16 @@ void l_search(l_List *list)
 
     uint64_t index;
 
-    printf("\n%s", "> l_insertion: Please enter the index:");
+    printf("\n%s", "> l_search: Please enter the index:");
     while(scanf("%llu", &index) != 1)
     {
         getchar();
-        fprintf(stderr, "\n%s%s", "> l_insertion: ", WRONG_INPUT);
-        printf("\n%s", "> l_insertion: Please enter again:");
+        fprintf(stderr, "\n%s%s", "> l_search: ", WRONG_INPUT);
+        printf("\n%s", "> l_search: Please enter again:");
     }
     getchar();
 
-    if(index == 0)
+    if(index >= list->size)
     {
         fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
         return;
@@ -458,7 +465,7 @@ void l_is_empty(l_List *list)
     else
     {
         printf("\n%s%llu", "> l_is_empty: The list is not empty, "
-                                     "the size of the list is", 
+                                     "the size of the list is ", 
                                      list->size);
     }
 }
@@ -540,12 +547,13 @@ static l_Node * search_node(l_List *list, uint64_t index)
     {
         return NULL;
     }
-
-    if(index == 0)
+    
+    if(index >= list->size)
     {
+        fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
         return NULL;
     }
-
+    
     list->curr = list->head->next;
     while((list->curr != list->head) && (--index != 0))
     {
@@ -563,7 +571,7 @@ static l_Node * search_node(l_List *list, uint64_t index)
 //The function is not equal to *l_is_empty* , it returns boolean value instead.
 static bool is_empty(l_List *list)
 {
-    if(list->head == NULL || list->size == 0)
+    if(list == NULL || list->size == 0)
     {
         return 1;
     }
