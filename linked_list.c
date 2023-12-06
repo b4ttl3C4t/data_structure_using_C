@@ -13,6 +13,22 @@
 
 
 
+void (*volatile const CONTROL_TABLE[OPCODE_SIZE - 1])(l_List *) = 
+{
+    l_construction,
+    l_insertion,
+    l_insert_head,
+    l_insert_tail,
+    l_destruction,
+    l_deletion,
+    l_delete_head,
+    l_delete_tail,
+    l_search,
+    l_display,
+    l_reverse,
+    l_is_empty
+};
+
 //The interface of the internal function.
        static void      input_data      (enum LinkedListType type, l_Node *node);
        static void      output_data     (enum LinkedListType type, l_Node *node);
@@ -65,56 +81,7 @@ int8_t l_control_table(l_List *list)
         fprintf(stderr, "\n%s%s", "> l_control_table: ", OPCODE_ERROR);
     }
 
-    switch(opcode)
-    {
-    case 0:
-        l_construction(list);
-        break;
-
-    case 1:
-        l_insertion(list);
-        break;
-
-    case 2:
-        l_insert_head(list);
-        break;
-    
-    case 3:
-        l_insert_tail(list);
-        break;
-
-    case 4:
-        l_destruction(list);
-        break;
-    
-    case 5:
-        l_deletion(list);
-        break;
-
-    case 6:
-        l_delete_head(list);
-        break;
-    
-    case 7:
-        l_delete_tail(list);
-        break;
-
-    case 8:
-        l_search(list, index);
-        break;
-    
-    case 9:
-        l_display(list);
-        break;
-    
-    case 10:
-        l_reverse(list);
-        break;
-
-    case 11:
-        l_is_empty(list);
-        break;
-    }
+    CONTROL_TABLE[opcode](list);
 
     return true;
 }
@@ -228,10 +195,30 @@ void l_insertion(l_List *list)
     }
 
     uint64_t index;
-    printf("%s", "> l_insertion: Please enter the index: ");
-    scanf("%llu", &index);
+
+    //Get input.
+    printf("\n%s", "> l_insertion: Please enter the index:");
+    while(scanf("%llu", &index) != 1)
+    {
+        getchar();
+        fprintf(stderr, "\n%s%s", "> l_insertion: ", WRONG_INPUT);
+        printf("\n%s", "> l_insertion: Please enter again:");
+    }
     getchar();
 
+    if(index == 0)
+    {
+        l_insert_head(list);
+        return;
+    }
+
+    if(index == list->size)
+    {
+        l_insert_tail(list);
+        return;
+    }
+
+    //Find the key.
     list->curr = search_node(list, index);
     if(list->curr == NULL)
     {
@@ -239,7 +226,7 @@ void l_insertion(l_List *list)
         return;
     }
 
-    //Constructing the linkage of the *curr* node between the prev and next one.
+    //Constructing the linkage of the *temp* node between the prev and next one.
     (list->temp) = (l_Node *)malloc(sizeof(l_Node));
     if((list->temp) == NULL)
     {
@@ -267,7 +254,27 @@ void l_insertion(l_List *list)
 
 void l_insert_head(l_List *list)
 {
-    
+    (list->temp) = (l_Node *)malloc(sizeof(l_Node));
+    if((list->temp) == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_insert_head: ", MALLOC_ERROR);
+        return;
+    }
+
+    (list->temp)->data = (l_Data *)malloc(sizeof(l_Data));
+    if((list->temp)->data == NULL)
+    {
+        fprintf(stderr, "\n%s%s", "> l_insert_head: ", MALLOC_ERROR);
+        return;
+    }
+    input_data(list->type, (list->temp));
+
+    (list->temp)->prev = (list->head);
+    (list->temp)->next = (list->head)->next;
+    (list->head)->next->prev = (list->temp);
+    (list->head)->next = (list->temp);
+
+    ++list->size;
 }
 
 void l_insert_tail(l_List *list)
@@ -275,14 +282,14 @@ void l_insert_tail(l_List *list)
     (list->temp) = (l_Node *)malloc(sizeof(l_Node));
     if((list->temp) == NULL)
     {
-        fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
+        fprintf(stderr, "\n%s%s", "> l_insert_tail: ", MALLOC_ERROR);
         return;
     }
 
     (list->temp)->data = (l_Data *)malloc(sizeof(l_Data));
     if((list->temp)->data == NULL)
     {
-        fprintf(stderr, "\n%s%s", "> l_construction: ", MALLOC_ERROR);
+        fprintf(stderr, "\n%s%s", "> l_insert_tail: ", MALLOC_ERROR);
         return;
     }
     input_data(list->type, (list->temp));
@@ -302,7 +309,6 @@ void l_destruction(l_List *list)
         fprintf(stderr, "\n%s%s", "> l_destruction: ", DESTRUCT_MESSAGE);
         return;
     }
-
     
     for(list->curr  = list->head->next; 
         list->curr != list->head; 
@@ -313,6 +319,7 @@ void l_destruction(l_List *list)
     }
     free(list->curr);
     free(list);
+    list = NULL;
 }
 
 void l_deletion(l_List *list)
@@ -324,8 +331,14 @@ void l_deletion(l_List *list)
     };
 
     uint64_t index;
-    printf("%s", "> l_insertion: Please enter the index: ");
-    scanf("%llu", &index);
+
+    printf("\n%s", "> l_deletion: Please enter the index:");
+    while(scanf("%llu", &index) != 1)
+    {
+        getchar();
+        fprintf(stderr, "\n%s%s", "> l_deletion: ", WRONG_INPUT);
+        printf("\n%s", "> l_deletion: Please enter again:");
+    }
     getchar();
 
     list->curr = search_node(list, index);
@@ -361,25 +374,15 @@ void l_search(l_List *list)
     }
 
     uint64_t index;
-    printf("%s", "> l_insertion: Please enter the index: ");
-    scanf("%llu", &index);
-    getchar();
 
-    printf("\n%s", "> input_data: Please enter the data:");
-    while(type == normal)
+    printf("\n%s", "> l_insertion: Please enter the index:");
+    while(scanf("%llu", &index) != 1)
     {
-        
-        
-        if(scanf("%d", &node->data->default_data.integer) == 1)
-        {
-            getchar();
-            return;
-        }
-
         getchar();
-        fprintf(stderr, "\n%s%s", "> input_data: ", WRONG_INPUT);
-        printf("\n%s", "> input_data: Please enter again:");
+        fprintf(stderr, "\n%s%s", "> l_insertion: ", WRONG_INPUT);
+        printf("\n%s", "> l_insertion: Please enter again:");
     }
+    getchar();
 
     if(index == 0)
     {

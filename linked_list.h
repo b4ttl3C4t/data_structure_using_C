@@ -61,16 +61,18 @@ typedef struct Linked_List_s
 /*The *head node* means the start of the linked list.
  *The *tail node* means the end of the linked list. 
  *it's a circular linked list, so there is no need for *tail node*. */
+
 /*Temporary node type:
- *The *previous node* , *curr node* , and *temporary node* record the status of the node,
+ *The *previous node* , *current node* , and *temporary node* record the status of the node,
  *you can only use the foremost one whem you construct the doubly linked list.
  *The *sentinel node* means the check point of the linked list. */
+
 /*Special operational node type (not in the structure):
  *The *dummy node* can avoid the special operation to the head node.
  *and let the code more clear and promote its readness. 
  *Those two can merge together, since the function of them is similar. 
  *(Actually, the *dummy node* only would be used to singly linked list
- * and could be replaced by *previous node* ,
+ * and could be replaced by *previous node* or *temporary node* ,
  * moreover, the *sentinel node* could be replaced as well.) */
 
 
