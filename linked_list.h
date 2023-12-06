@@ -80,17 +80,17 @@ int8_t   l_control_table    (l_List *);
 l_List * l_initialization   (void);
 
 void l_construction     (l_List *);
-void l_insertion        (l_List *, uint64_t);
+void l_insertion        (l_List *);
 void l_insert_head      (l_List *);
 void l_insert_tail      (l_List *);
 
 void l_destruction      (l_List *);
-void l_deletion         (l_List *, uint64_t);
+void l_deletion         (l_List *);
 void l_delete_head      (l_List *);
 void l_delete_tail      (l_List *);
 
 //Useful operation and algorithm based on divergent linked list type.
-void l_search           (l_List *, uint64_t);
+void l_search           (l_List *);
 void l_display          (l_List *);
 void l_reverse          (l_List *);
 void l_is_empty         (l_List *);

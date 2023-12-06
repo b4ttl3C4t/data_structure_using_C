@@ -72,10 +72,7 @@ int8_t l_control_table(l_List *list)
         break;
 
     case 1:
-        printf("%s", "> l_control_table: Please enter the index: ");
-        scanf("%llu", &index);
-        getchar();
-        l_insertion(list, index);
+        l_insertion(list);
         break;
 
     case 2:
@@ -91,10 +88,7 @@ int8_t l_control_table(l_List *list)
         break;
     
     case 5:
-        printf("%s", "> l_control_table: Please enter the index: ");
-        scanf("%llu", &index);
-        getchar();
-        l_deletion(list, index);
+        l_deletion(list);
         break;
 
     case 6:
@@ -106,9 +100,6 @@ int8_t l_control_table(l_List *list)
         break;
 
     case 8:
-        printf("%s", "> l_control_table: Please enter the index: ");
-        scanf("%llu", &index);
-        getchar();
         l_search(list, index);
         break;
     
@@ -227,7 +218,7 @@ void l_construction(l_List *list)
 }
 
 //Insert the new node to the previous one of the given index.
-void l_insertion(l_List *list, uint64_t index)
+void l_insertion(l_List *list)
 {
     if(is_empty(list))
     {
@@ -235,6 +226,11 @@ void l_insertion(l_List *list, uint64_t index)
         l_construction(list);
         return;
     }
+
+    uint64_t index;
+    printf("%s", "> l_insertion: Please enter the index: ");
+    scanf("%llu", &index);
+    getchar();
 
     list->curr = search_node(list, index);
     if(list->curr == NULL)
@@ -271,7 +267,7 @@ void l_insertion(l_List *list, uint64_t index)
 
 void l_insert_head(l_List *list)
 {
-    l_insertion(list, 1);
+    
 }
 
 void l_insert_tail(l_List *list)
@@ -319,13 +315,18 @@ void l_destruction(l_List *list)
     free(list);
 }
 
-void l_deletion(l_List *list, uint64_t index)
+void l_deletion(l_List *list)
 {
     if(is_empty(list))
     {
         fprintf(stderr, "\n%s%s", "> l_deletion: ", DESTRUCT_MESSAGE);
         return;
     };
+
+    uint64_t index;
+    printf("%s", "> l_insertion: Please enter the index: ");
+    scanf("%llu", &index);
+    getchar();
 
     list->curr = search_node(list, index);
     if(list->curr == NULL)
@@ -343,20 +344,41 @@ void l_deletion(l_List *list, uint64_t index)
 
 void l_delete_head(l_List *list)
 {
-    l_deletion(list, 1);
+    l_deletion(list);
 }
 
 void l_delete_tail(l_List *list)
 {
-    l_deletion(list, list->size);
+    l_deletion(list);
 }
 
-void l_search(l_List *list, uint64_t index)
+void l_search(l_List *list)
 {
     if(is_empty(list))
     {
         fprintf(stderr, "\n%s%s", "> l_search: ", DESTRUCT_MESSAGE);
         return;
+    }
+
+    uint64_t index;
+    printf("%s", "> l_insertion: Please enter the index: ");
+    scanf("%llu", &index);
+    getchar();
+
+    printf("\n%s", "> input_data: Please enter the data:");
+    while(type == normal)
+    {
+        
+        
+        if(scanf("%d", &node->data->default_data.integer) == 1)
+        {
+            getchar();
+            return;
+        }
+
+        getchar();
+        fprintf(stderr, "\n%s%s", "> input_data: ", WRONG_INPUT);
+        printf("\n%s", "> input_data: Please enter again:");
     }
 
     if(index == 0)
@@ -449,34 +471,40 @@ static void input_data(enum LinkedListType type, l_Node *node)
         return;
     }
     
-    while(type == normal)
+    if(type == normal)
     {
         printf("\n%s", "> input_data: Please enter the data:");
-        
-        if(scanf("%d", &node->data->default_data.integer) == 1)
-        {
-            getchar();
-            return;
-        }
 
-        getchar();
-        fprintf(stderr, "\n%s%s", "> input_data: ", WRONG_INPUT);
-        printf("\n%s", "> input_data: Please enter again:");
+        while(1)
+        {
+            if(scanf("%d", &node->data->default_data.integer) == 1)
+            {
+                getchar();
+                return;
+            }
+
+            getchar();
+            fprintf(stderr, "\n%s%s", "> input_data: ", WRONG_INPUT);
+            printf("\n%s", "> input_data: Please enter again:");
+        }
     }
 
-    while(type == polynomial)
+    if(type == polynomial)
     {
         printf("\n%s", "> input_data: Please enter the coefficient and the power:");
-
-        if(scanf("%lf", &node->data->polynomial.coefficient) == 1 && scanf("%llu", &node->data->polynomial.power) == 1)
+        
+        while(1)
         {
-            getchar();
-            return;
-        }
+            if(scanf("%lf", &node->data->polynomial.coefficient) == 1 && scanf("%llu", &node->data->polynomial.power) == 1)
+            {
+                getchar();
+                return;
+            }
 
-        getchar();
-        fprintf(stderr, "\n%s%s", "> input_data: ", WRONG_INPUT);
-        printf("\n%s", "> input_data: Please enter again: ");
+            getchar();
+            fprintf(stderr, "\n%s%s", "> input_data: ", WRONG_INPUT);
+            printf("\n%s", "> input_data: Please enter again: ");
+        }
     }
 }
 
