@@ -1,7 +1,7 @@
 #include "linked_list.h"
 
 #define LIST_TYPE_SIZE  2
-#define OPCODE_SIZE     13
+#define OPCODE_SIZE     14
 
 #define MALLOC_ERROR        "The memory allocation for linked list aborts."
 #define MODE_ERROR          "The mode is not accessible."
@@ -23,6 +23,7 @@ void (*volatile const CONTROL_TABLE[OPCODE_SIZE - 1])(l_List *) =
     l_deletion,
     l_delete_head,
     l_delete_tail,
+    l_index,
     l_search,
     l_display,
     l_reverse,
@@ -32,7 +33,8 @@ void (*volatile const CONTROL_TABLE[OPCODE_SIZE - 1])(l_List *) =
 //The interface of the internal function.
        static void      input_data      (enum LinkedListType type, l_Node *node);
        static void      output_data     (enum LinkedListType type, l_Node *node);
-       static l_Node *  search_node     (l_List *list, uint64_t index);
+inline static l_Node *  node_index      (l_List *list, uint64_t index);
+inline static l_Node *  value_search    (l_List *list, l_Data *value);
 inline static bool      is_empty        (l_List *list);
 inline static void      swap_data       (l_Node *X, l_Node *Y);
 
@@ -52,8 +54,10 @@ int8_t l_control_table(l_List *list)
 {
     static uint64_t opcode;
 
-    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
-                        "> l_control_table: ",
+    printf("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+                        "> ________________________",
+                        "  |   l_control_table     |",
+                        "  |_______________________|",
                         "  |code|     function     |",
                         "  |  0 | l_construction   |",
                         "  |  1 | l_insertion      |",
@@ -63,16 +67,18 @@ int8_t l_control_table(l_List *list)
                         "  |  5 | l_deletion       |",
                         "  |  6 | l_delete_head    |",
                         "  |  7 | l_delete_tail    |",
-                        "  |  8 | l_search         |",
-                        "  |  9 | l_display        |",
-                        "  | 10 | l_reverse        |",
-                        "  | 11 | l_is_empty       |",
-                        "  | 12 |       EXIT       |",
+                        "  |  8 | l_index          |",
+                        "  |  9 | l_search         |",
+                        "  | 10 | l_display        |",
+                        "  | 11 | l_reverse        |",
+                        "  | 12 | l_is_empty       |",
+                        "  | 13 |    E  X  I  T    |",
+                        "  |____|__________________|",
                         "> l_control_table: What do you want to do now? Please enter the opcode:");
     scanf("%llu", &opcode);
     getchar();
 
-    if(opcode == 12)
+    if(opcode == OPCODE_SIZE - 1)
     {
         printf("\n%s", "> l_control_table: Exiting the program operation...");
         return false;
@@ -221,7 +227,7 @@ void l_insertion(l_List *list)
     }
 
     //Find the key.
-    list->curr = search_node(list, index);
+    list->curr = node_index(list, index);
     if(list->curr == NULL)
     {
         fprintf(stderr, "\n%s%s", "> l_insertion: ", INDEX_ERROR);
@@ -322,10 +328,9 @@ void l_destruction(l_List *list)
         free(list->curr);
         --(list->size);
     }
+
     free(list->head);
     list->head = NULL;
-
-    if(is_empty(list)) printf("ABC");
 }
 
 void l_deletion(l_List *list)
@@ -359,7 +364,7 @@ void l_deletion(l_List *list)
         return;
     }
     
-    list->curr = search_node(list, index + 1);
+    list->curr = node_index(list, index + 1);
     
     if(list->curr == NULL)
     {
@@ -408,28 +413,28 @@ void l_delete_tail(l_List *list)
     --(list->size);
 }
 
-void l_search(l_List *list)
+void l_index(l_List *list)
 {
     if(is_empty(list))
     {
-        fprintf(stderr, "\n%s%s", "> l_search: ", DESTRUCT_MESSAGE);
+        fprintf(stderr, "\n%s%s", "> l_index: ", DESTRUCT_MESSAGE);
         return;
     }
 
     uint64_t index;
 
-    printf("\n%s", "> l_search: Please enter the index:");
+    printf("\n%s", "> l_index: Please enter the index:");
     while(scanf("%llu", &index) != 1)
     {
         getchar();
-        fprintf(stderr, "\n%s%s", "> l_search: ", WRONG_INPUT);
-        printf("\n%s", "> l_search: Please enter again:");
+        fprintf(stderr, "\n%s%s", "> l_index: ", WRONG_INPUT);
+        printf("\n%s", "> l_index: Please enter again:");
     }
     getchar();
 
     if(index >= list->size)
     {
-        fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
+        fprintf(stderr, "\n%s%s", "> l_index: ", INDEX_ERROR);
         return;
     }
 
@@ -441,11 +446,85 @@ void l_search(l_List *list)
 
     if((list->curr == list->head) && (index != 0))
     {
-        fprintf(stderr, "\n%s%s", "> l_search: ", INDEX_ERROR);
+        fprintf(stderr, "\n%s%s", "> l_index: ", INDEX_ERROR);
         return;
     }
 
     output_data(list->type, list->curr);
+}
+
+void l_search(l_List *list)
+{
+    if(is_empty(list))
+    {
+        fprintf(stderr, "\n%s%s", "> l_search: ", DESTRUCT_MESSAGE);
+        return;
+    }
+
+    if(list->type == normal)
+    {
+        int64_t  value;
+        uint64_t index;
+
+        printf("\n%s", "> l_search: Please enter the value:");
+        while(scanf("%lld", &value) != 1)
+        {
+            getchar();
+            fprintf(stderr, "\n%s%s", "> l_search: ", WRONG_INPUT);
+            printf("\n%s", "> l_search: Please enter again:");
+        }
+        getchar();
+        
+        index = 0;
+        list->curr = list->head->next;
+        while(list->curr != list->head)
+        {
+            if(list->curr->data->default_data.integer == value)
+            {
+                printf("\n%s%llu", "> l_search: The value is inside, the index is ", index);
+                return;
+            }
+
+            list->curr = list->curr->next;
+            ++index;
+        }
+    }
+
+    if(list->type == polynomial)
+    {
+        double coefficient;
+        uint64_t power, index;
+
+        printf("\n%s", "> l_search: Please enter the value:");
+        while(scanf("%lf%llu", &coefficient, &power) != 2)
+        {
+            getchar();
+            fprintf(stderr, "\n%s%s", "> l_search: ", WRONG_INPUT);
+            printf("\n%s", "> l_search: Please enter again:");
+        }
+        getchar();
+
+        index = 0;
+        list->curr = list->head->next;
+        while(list->curr != list->head)
+        {
+            if( list->curr->data->polynomial.coefficient == coefficient &&
+                list->curr->data->polynomial.power == power)
+            {
+                printf("\n%s%llu", "> l_search: The value is inside, the index is ", index);
+                return;
+            }
+
+            list->curr = list->curr->next;
+            ++index;
+        }
+    }
+
+    if(list->curr == list->head)
+    {
+        printf("\n%s", "> l_search: The value is not inside.");
+        return;
+    }
 }
 
 void l_display(l_List *list)
@@ -523,7 +602,7 @@ static void input_data(enum LinkedListType type, l_Node *node)
 
         while(1)
         {
-            if(scanf("%d", &node->data->default_data.integer) == 1)
+            if(scanf("%lld", &node->data->default_data.integer) == 1)
             {
                 getchar();
                 return;
@@ -564,20 +643,20 @@ static void output_data(enum LinkedListType type, l_Node *node)
 
     if(type == normal)
     {
-        printf("%d ", node->data->default_data.integer);
+        printf("%d", node->data->default_data.integer);
         return;
     }
 
     if(type == polynomial)
     {
-        printf("%lfx^%llu + ",  node->data->polynomial.coefficient,
-                                node->data->polynomial.power);
+        printf("%lfx^%llu", node->data->polynomial.coefficient,
+                            node->data->polynomial.power);
         return;
     }
 }
 
 //Searching weather the node exists.
-static l_Node * search_node(l_List *list, uint64_t index)
+static l_Node * node_index(l_List *list, uint64_t index)
 {
     if(is_empty(list))
     {
@@ -601,6 +680,52 @@ static l_Node * search_node(l_List *list, uint64_t index)
     }
 
     return list->curr;
+}
+
+static l_Node * value_search(l_List *list, l_Data *value)
+{
+    if(is_empty(list))
+    {
+        return NULL;
+    }
+    
+    uint64_t index = 0;
+
+    if(list->type == normal)
+    {
+        list->curr = list->head->next;
+        while(list->curr != list->head)
+        {
+            if(list->curr->data->default_data.integer == value->default_data.integer)
+            {
+                return index;
+            }
+
+            list->curr = list->curr->next;
+            ++index;
+        }
+    }
+
+    if(list->type == polynomial)
+    {
+        list->curr = list->head->next;
+        while(list->curr != list->head)
+        {
+            if( list->curr->data->polynomial.coefficient == value->polynomial.coefficient &&
+                list->curr->data->polynomial.power == value->polynomial.power)
+            {
+                return index;
+            }
+
+            list->curr = list->curr->next;
+            ++index;
+        }
+    }
+
+    if(list->curr == list->head)
+    {
+        return NULL;
+    }
 }
 
 //The function is not equal to *l_is_empty* , it returns boolean value instead.

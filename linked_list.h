@@ -92,12 +92,15 @@ void l_delete_head      (l_List *);
 void l_delete_tail      (l_List *);
 
 //Useful operation and algorithm based on divergent linked list type.
+void l_index            (l_List *);
 void l_search           (l_List *);
 void l_display          (l_List *);
 void l_reverse          (l_List *);
 void l_is_empty         (l_List *);
 /*
 //The following algorithm is only for polynomial linked list.
+l_List * polynomial_merging           (l_List *, l_List *);
+l_List * polynomial_arrangement       (l_List *, l_List *);
 l_List * polynomial_addition          (l_List *, l_List *);
 l_List * polynomial_subtraction       (l_List *, l_List *);
 l_List * polynomial_multiplication    (l_List *, l_List *);
