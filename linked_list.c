@@ -44,8 +44,8 @@ void insertion(node_ptr_t *head, char input)
     }
     else
     {
-        prev_node->next = new_node;
         new_node->next = curr_node;
+        prev_node->next = new_node;
     }
 }
 
@@ -98,6 +98,7 @@ void print_list(node_ptr_t head)
 {
     if (is_empty(head))
     {
+        printf("NULL\n");
         return;
     }
 
