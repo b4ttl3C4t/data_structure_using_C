@@ -20,29 +20,39 @@ void insertion(node_ptr_t *head, char input)
     {
         return;
     }
-
     new_node->data = input;
+    
+    if(is_empty(*head))
+    {
+    	*head = new_node;
+    	(*head)->prev = NULL;
+    	(*head)->next = NULL;
+    	return;
+	}
+    
     node_ptr_t curr_node = *head;
 
     while(curr_node != NULL && curr_node->next != NULL && input > curr_node->data)
     {
         curr_node = curr_node->next;
     }
-
-    if(curr_node == NULL)
-    {printf("1");
+	
+	// Insert from the head of the list.
+    if(curr_node == *head)
+    {
         new_node->prev = NULL;
         new_node->next = *head;
+        curr_node->prev = new_node;
         *head = new_node;
-    }
-    else if(curr_node->next == NULL)
-    {printf("2");
+    }// Insert from the tail of the list.
+    else if(curr_node != NULL && curr_node->next == NULL)
+    {
         new_node->prev = curr_node;
         new_node->next = NULL;
         curr_node->next = new_node;
-    }
+    }// Insert from the node within the list.
     else
-    {printf("3");
+    {
         new_node->prev = curr_node->prev;
         new_node->next = curr_node;
         curr_node->prev->next = new_node;
@@ -57,18 +67,39 @@ void deletion(node_ptr_t *head, char value)
         return;
     }
 
+	if((*head)->data == value && (*head)->next == NULL)
+	{
+		free(*head);
+		*head = NULL;
+		return;
+	}
+	if((*head)->data == value)
+	{
+		*head = (*head)->next;
+		(*head)->prev = NULL;
+		free((*head)->prev);
+		return;
+	}
+
     node_ptr_t curr_node = *head;
-    while(curr_node != NULL && value != curr_node->data)
+    while(curr_node != NULL && curr_node->next != NULL && value != curr_node->data)
     {
         curr_node = curr_node->next;
     }
     
-    if(curr_node != NULL)
+    if(curr_node != NULL && curr_node->next == NULL && value == curr_node->data)
     {
-        curr_node->prev->next = curr_node->next;
+        curr_node->prev->next = NULL;
+        free(curr_node);
+        return;
+    }
+    else if(curr_node != NULL && curr_node->next != NULL)
+    {
+    	curr_node->prev->next = curr_node->next;
         curr_node->next->prev = curr_node->prev;
         free(curr_node);
-    }
+        return;
+	}
 }
 
 bool is_empty(node_ptr_t head)
@@ -80,7 +111,7 @@ void print_list(node_ptr_t head)
 {
     if(is_empty(head))
     {
-        printf("NULL");
+        printf("NULL\n");
         return;
     }
 
