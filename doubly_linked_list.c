@@ -24,19 +24,25 @@ void insertion(node_ptr_t *head, char input)
     new_node->data = input;
     node_ptr_t curr_node = *head;
 
-    while(curr_node != NULL && input > curr_node->data)
+    while(curr_node != NULL && curr_node->next != NULL && input > curr_node->data)
     {
         curr_node = curr_node->next;
     }
 
-    if(curr_node == NULL)
-    {
+    if(curr_node == NULL && curr_node->next == NULL)
+    {printf("1");
         new_node->prev = NULL;
         new_node->next = *head;
         *head = new_node;
     }
+    else if(curr_node != NULL && curr_node->next == NULL)
+    {printf("2");
+        new_node->prev = curr_node;
+        new_node->next = NULL;
+        curr_node->next = new_node;
+    }
     else
-    {
+    {printf("3");
         new_node->prev = curr_node->prev;
         new_node->next = curr_node;
         curr_node->prev->next = new_node;
