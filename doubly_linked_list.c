@@ -29,13 +29,13 @@ void insertion(node_ptr_t *head, char input)
         curr_node = curr_node->next;
     }
 
-    if(curr_node == NULL && curr_node->next == NULL)
+    if(curr_node == NULL)
     {printf("1");
         new_node->prev = NULL;
         new_node->next = *head;
         *head = new_node;
     }
-    else if(curr_node != NULL && curr_node->next == NULL)
+    else if(curr_node->next == NULL)
     {printf("2");
         new_node->prev = curr_node;
         new_node->next = NULL;
