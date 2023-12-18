@@ -79,7 +79,7 @@ void deletion(node_ptr_t *head, char value)
     }
 
     /* If there is the searched node, 
-     * then set the next_ptr of the prevent node, 
+     * then set the next pointer of the prevent node, 
      * and delete the current node. */
     if (curr_node != NULL)
     {
@@ -101,6 +101,7 @@ void reverse(node_ptr_t *head)
     node_ptr_t next_node = NULL;
 	node_ptr_t curr_node = *head;
 	
+	//In this case, you could only suppose curr_node is not NULL.
     while(curr_node != NULL)
     {
     	// Operate the current node only when it's not NULL.

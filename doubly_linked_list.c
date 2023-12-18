@@ -22,6 +22,7 @@ void insertion(node_ptr_t *head, char input)
     }
     new_node->data = input;
     
+    // Insert the head node when there is no node in the list.
     if(is_empty(*head))
     {
     	*head = new_node;
@@ -37,20 +38,22 @@ void insertion(node_ptr_t *head, char input)
         curr_node = curr_node->next;
     }
 	
-	// Insert from the head of the list.
+	// Insert from the head of the list, exclude the special case.
     if(curr_node == *head)
     {
         new_node->prev = NULL;
         new_node->next = *head;
         curr_node->prev = new_node;
         *head = new_node;
-    }// Insert from the tail of the list.
+    }
+	// Insert from the tail of the list, exclude the special case.
     else if(curr_node->next == NULL)
     {
         new_node->prev = curr_node;
         new_node->next = NULL;
         curr_node->next = new_node;
-    }// Insert from the node within the list.
+    }
+	// Insert from the node within the list.
     else
     {
         new_node->prev = curr_node->prev;
@@ -66,14 +69,16 @@ void deletion(node_ptr_t *head, char value)
     {
         return;
     }
-
+	
+	// Delete the head node when it's the only-one node in the list.
 	if((*head)->data == value && (*head)->next == NULL)
 	{
 		free(*head);
 		*head = NULL;
 		return;
 	}
-	if((*head)->data == value)
+	// Delete the head of the list, and exclude the special case.
+	else if((*head)->data == value)
 	{
 		*head = (*head)->next;
 		(*head)->prev = NULL;
@@ -87,12 +92,14 @@ void deletion(node_ptr_t *head, char value)
         curr_node = curr_node->next;
     }
     
+    // Delete the tail of the list, and exclude the special case.
     if(curr_node->next == NULL && value == curr_node->data)
     {
         curr_node->prev->next = NULL;
         free(curr_node);
         return;
     }
+	// Delete the node within the list.
     else if(curr_node->next != NULL)
     {
     	curr_node->prev->next = curr_node->next;
@@ -101,6 +108,20 @@ void deletion(node_ptr_t *head, char value)
         return;
 	}
 }
+
+void reverse(node_ptr_t *head)
+{
+	if(is_empty(*head))
+    {
+        return;
+    }
+    
+    node_ptr_t curr_node = *head;
+    while(curr_node != NULL)
+    {
+    	
+	}
+} 
 
 bool is_empty(node_ptr_t head)
 {

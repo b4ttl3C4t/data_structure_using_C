@@ -17,6 +17,7 @@ typedef struct node *node_ptr_t;
 
 void insertion  (node_ptr_t *, char);
 void deletion   (node_ptr_t *, char);
+void reverse    (node_ptr_t *);
 bool is_empty   (node_ptr_t);
 void print_list (node_ptr_t);
 
