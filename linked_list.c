@@ -7,6 +7,7 @@ int main(void)
     insertion(&head, 'B'); print_list(head);
     insertion(&head, 'A'); print_list(head);
     insertion(&head, 'D'); print_list(head);
+    reverse(&head); print_list(head);
     deletion(&head, 'D'); print_list(head);
     deletion(&head, 'C'); print_list(head);
     deletion(&head, 'B'); print_list(head);
@@ -29,7 +30,7 @@ void insertion(node_ptr_t *head, char input)
     node_ptr_t curr_node = *head;
 
     // Find the location of what the input data should be.
-    while (curr_node != NULL && input > curr_node->data)
+    while (curr_node != NULL)
     {
         prev_node = curr_node;
         curr_node = curr_node->next;
@@ -71,7 +72,7 @@ void deletion(node_ptr_t *head, char value)
     node_ptr_t curr_node = *head;
 
     // Find the location of the node which data is the value.
-    while (curr_node != NULL && value != curr_node->data)
+    while (curr_node != NULL && curr_node->data != value)
     {
         prev_node = curr_node;
         curr_node = curr_node->next;
@@ -87,6 +88,30 @@ void deletion(node_ptr_t *head, char value)
         free(temp_node);
         return;
     }
+}
+
+void reverse(node_ptr_t *head)
+{
+	if (is_empty(*head))
+    {
+        return;
+    }
+    
+    node_ptr_t prev_node = NULL;
+    node_ptr_t next_node = NULL;
+	node_ptr_t curr_node = *head;
+	
+    while(curr_node != NULL)
+    {
+    	// Operate the current node only when it's not NULL.
+		next_node = curr_node->next;
+    	curr_node->next = prev_node;
+    	
+    	prev_node = curr_node;
+    	curr_node = next_node;
+	}
+	
+	*head = prev_node;
 }
 
 bool is_empty(node_ptr_t head)

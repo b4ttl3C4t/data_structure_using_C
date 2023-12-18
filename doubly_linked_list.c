@@ -32,7 +32,7 @@ void insertion(node_ptr_t *head, char input)
     
     node_ptr_t curr_node = *head;
 
-    while(curr_node != NULL && curr_node->next != NULL && input > curr_node->data)
+    while(curr_node->next != NULL && input > curr_node->data)
     {
         curr_node = curr_node->next;
     }
@@ -45,7 +45,7 @@ void insertion(node_ptr_t *head, char input)
         curr_node->prev = new_node;
         *head = new_node;
     }// Insert from the tail of the list.
-    else if(curr_node != NULL && curr_node->next == NULL)
+    else if(curr_node->next == NULL)
     {
         new_node->prev = curr_node;
         new_node->next = NULL;
@@ -82,18 +82,18 @@ void deletion(node_ptr_t *head, char value)
 	}
 
     node_ptr_t curr_node = *head;
-    while(curr_node != NULL && curr_node->next != NULL && value != curr_node->data)
+    while(curr_node->next != NULL && value != curr_node->data)
     {
         curr_node = curr_node->next;
     }
     
-    if(curr_node != NULL && curr_node->next == NULL && value == curr_node->data)
+    if(curr_node->next == NULL && value == curr_node->data)
     {
         curr_node->prev->next = NULL;
         free(curr_node);
         return;
     }
-    else if(curr_node != NULL && curr_node->next != NULL)
+    else if(curr_node->next != NULL)
     {
     	curr_node->prev->next = curr_node->next;
         curr_node->next->prev = curr_node->prev;
