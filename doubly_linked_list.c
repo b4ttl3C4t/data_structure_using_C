@@ -6,12 +6,16 @@ int main(void)
 
     insertion(&head, 'B');
     print_list(head);
+	reverse(&head); print_list(head);
     insertion(&head, 'A');
     print_list(head);
+	reverse(&head); print_list(head);
     insertion(&head, 'D');
     print_list(head);
+	reverse(&head); print_list(head);
     insertion(&head, 'S');
     print_list(head);
+	reverse(&head); print_list(head);
     deletion(&head, 'D');
     print_list(head);
     deletion(&head, 'C');
@@ -60,7 +64,7 @@ void insertion(node_ptr_t *head, char input)
     {
         new_node->prev = NULL;
         new_node->next = *head;
-        curr_node->prev = new_node;
+        (*head)->prev = new_node;
         *head = new_node;
     }
     // Insert from the tail of the list, exclude the special case.
@@ -97,9 +101,9 @@ void deletion(node_ptr_t *head, char value)
     // Delete the head of the list, and exclude the special case.
     else if ((*head)->data == value)
     {
-        *head = (*head)->next;
-        (*head)->prev = NULL;
-        free((*head)->prev);
+        free((*head)->next->prev);
+		(*head)->next->prev = NULL;
+		*head = (*head)->next;
         return;
     }
 
@@ -140,20 +144,20 @@ void reverse(node_ptr_t *head)
     	return;
 	}
     
+	node_ptr_t curr_node = (*head)->next;
+    node_ptr_t temp_node;
+    
 	// Handle the head of the list.
     (*head)->prev = (*head)->next;
 	(*head)->next = NULL;
-	
-	node_ptr_t curr_node = (*head)->prev;
-    node_ptr_t temp_node;
     
     // Handle the node within the list.
     while (curr_node->next != NULL)
     {
-        temp_node = curr_node->prev;
-        curr_node->prev = curr_node->next;
-        curr_node->next = temp_node;
-        curr_node = curr_node->prev;
+        temp_node = curr_node->next;
+        curr_node->next = curr_node->prev;
+        curr_node->prev = temp_node;
+        curr_node = temp_node;
     }
 	*head = curr_node;
 	

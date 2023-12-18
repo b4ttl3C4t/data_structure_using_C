@@ -38,7 +38,7 @@ void insertion(node_ptr_t *head, char input)
     node_ptr_t curr_node = *head;
 
     // Find the location of what the input data should be.
-    while (curr_node != NULL)
+    while (curr_node != NULL && input > curr_node->data)
     {
         prev_node = curr_node;
         curr_node = curr_node->next;
@@ -58,7 +58,7 @@ void insertion(node_ptr_t *head, char input)
     }
 }
 
-// According to value, remove the corresponding node
+// According to value, remove the corresponding node.
 void deletion(node_ptr_t *head, char value)
 {
     if (is_empty(*head))
@@ -77,7 +77,7 @@ void deletion(node_ptr_t *head, char value)
 
     node_ptr_t temp_node;
     node_ptr_t prev_node = NULL;
-    node_ptr_t curr_node = *head;
+    node_ptr_t curr_node = (*head)->next;	// The head node has already checked.
 
     // Find the location of the node which data is the value.
     while (curr_node != NULL && curr_node->data != value)
@@ -107,9 +107,9 @@ void reverse(node_ptr_t *head)
 
     node_ptr_t prev_node = NULL;
     node_ptr_t next_node = NULL;
-    node_ptr_t curr_node = *head;
-
-    // In this case, you could only suppose curr_node is not NULL.
+    node_ptr_t curr_node = *head;// Although the head node has already checked, you still reverse it.
+    
+	// In this case, you could only suppose curr_node is not NULL.
     while (curr_node != NULL)
     {
         // Operate the current node only when it's not NULL.
