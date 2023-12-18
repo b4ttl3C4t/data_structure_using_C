@@ -4,14 +4,22 @@ int main(void)
 {
     node_ptr_t head = NULL;
 
-    insertion(&head, 'B'); print_list(head);
-    insertion(&head, 'A'); print_list(head);
-    insertion(&head, 'D'); print_list(head);
-    reverse(&head); print_list(head);
-    deletion(&head, 'D'); print_list(head);
-    deletion(&head, 'C'); print_list(head);
-    deletion(&head, 'B'); print_list(head);
-    deletion(&head, 'A'); print_list(head);
+    insertion(&head, 'B');
+    print_list(head);
+    insertion(&head, 'A');
+    print_list(head);
+    insertion(&head, 'D');
+    print_list(head);
+    reverse(&head);
+    print_list(head);
+    deletion(&head, 'D');
+    print_list(head);
+    deletion(&head, 'C');
+    print_list(head);
+    deletion(&head, 'B');
+    print_list(head);
+    deletion(&head, 'A');
+    print_list(head);
 }
 
 // According to input data, insert it alphabetically.
@@ -78,8 +86,8 @@ void deletion(node_ptr_t *head, char value)
         curr_node = curr_node->next;
     }
 
-    /* If there is the searched node, 
-     * then set the next pointer of the prevent node, 
+    /* If there is the searched node,
+     * then set the next pointer of the prevent node,
      * and delete the current node. */
     if (curr_node != NULL)
     {
@@ -92,27 +100,27 @@ void deletion(node_ptr_t *head, char value)
 
 void reverse(node_ptr_t *head)
 {
-	if (is_empty(*head))
+    if (is_empty(*head))
     {
         return;
     }
-    
+
     node_ptr_t prev_node = NULL;
     node_ptr_t next_node = NULL;
-	node_ptr_t curr_node = *head;
-	
-	//In this case, you could only suppose curr_node is not NULL.
-    while(curr_node != NULL)
+    node_ptr_t curr_node = *head;
+
+    // In this case, you could only suppose curr_node is not NULL.
+    while (curr_node != NULL)
     {
-    	// Operate the current node only when it's not NULL.
-		next_node = curr_node->next;
-    	curr_node->next = prev_node;
-    	
-    	prev_node = curr_node;
-    	curr_node = next_node;
-	}
-	
-	*head = prev_node;
+        // Operate the current node only when it's not NULL.
+        next_node = curr_node->next;
+        curr_node->next = prev_node;
+
+        prev_node = curr_node;
+        curr_node = next_node;
+    }
+
+    *head = prev_node;
 }
 
 bool is_empty(node_ptr_t head)
