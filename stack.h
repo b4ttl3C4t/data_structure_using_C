@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "array.h"
-#include "doubly_circular_xor_linked_list.h"
+#include "circular_doubly_linked_list.h"
 
 
 

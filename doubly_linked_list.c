@@ -4,36 +4,44 @@ int main(void)
 {
     node_ptr_t head = NULL;
 
-    insertion(&head, 'B');
+    insertion(&head, __data__('B', 'B', 'B'));
     print_list(head);
 	reverse(&head); print_list(head);
-    insertion(&head, 'A');
+    insertion(&head, __data__('A', 'A', 'A'));
     print_list(head);
 	reverse(&head); print_list(head);
-    insertion(&head, 'D');
+    insertion(&head, __data__('D', 'D', 'D'));
     print_list(head);
 	reverse(&head); print_list(head);
-    insertion(&head, 'S');
+    insertion(&head, __data__('S', 'S', 'S'));
     print_list(head);
 	reverse(&head); print_list(head);
-    deletion(&head, 'D');
+    deletion(&head, __data__('D', 'D', 'D'));
     print_list(head);
-    deletion(&head, 'C');
+    deletion(&head, __data__('C', 'C', 'C'));
     print_list(head);
-    deletion(&head, 'B');
+    deletion(&head, __data__('B', 'B', 'B'));
     print_list(head);
-    deletion(&head, 'A');
+    deletion(&head, __data__('A', 'A', 'A'));
     print_list(head);
 }
 
-void insertion(node_ptr_t *head, char input)
+void insertion(node_ptr_t *head, data_t input)
 {
     node_ptr_t new_node = (node_ptr_t)malloc(sizeof(node_t));
     if (new_node == NULL)
     {
         return;
     }
-    new_node->data = input;
+
+    new_node->data = (data_ptr_t)malloc(sizeof(data_t));
+    if (new_node->data == NULL)
+    {
+        free(new_node);
+        return;
+    }
+
+    __data_copy__(new_node->data, &input);
 
     // Insert the head node when there is no node in the list.
     if (is_empty(*head))
@@ -46,7 +54,7 @@ void insertion(node_ptr_t *head, char input)
 
     node_ptr_t curr_node = *head;
 
-    while (curr_node->next != NULL && input > curr_node->data)
+    while (curr_node->next != NULL && __data_compare__(&input, curr_node->data) > 0)
     {
         curr_node = curr_node->next;
     }
@@ -84,7 +92,7 @@ void insertion(node_ptr_t *head, char input)
     }
 }
 
-void deletion(node_ptr_t *head, char value)
+void deletion(node_ptr_t *head, data_t value)
 {
     if (is_empty(*head))
     {
@@ -92,14 +100,15 @@ void deletion(node_ptr_t *head, char value)
     }
 
     // Delete the head node when it's the one only node in the list.
-    if ((*head)->data == value && (*head)->next == NULL)
+    if (__data_compare__((*head)->data, &value) == 0 && 
+        (*head)->next == NULL)
     {
         free(*head);
         *head = NULL;
         return;
     }
     // Delete the head of the list, and exclude the special case.
-    else if ((*head)->data == value)
+    else if (__data_compare__((*head)->data, &value) == 0)
     {
         free((*head)->next->prev);
 		(*head)->next->prev = NULL;
@@ -108,13 +117,15 @@ void deletion(node_ptr_t *head, char value)
     }
 
     node_ptr_t curr_node = *head;
-    while (curr_node->next != NULL && value != curr_node->data)
+    while (curr_node->next != NULL && 
+           __data_compare__(curr_node->data, &value) != 0)
     {
         curr_node = curr_node->next;
     }
 
     // Delete the tail of the list, and exclude the special case.
-    if (curr_node->next == NULL && value == curr_node->data)
+    if (curr_node->next == NULL && 
+        __data_compare__(curr_node->data, &value) == 0)
     {
         curr_node->prev->next = NULL;
         free(curr_node);
@@ -184,7 +195,8 @@ void print_list(node_ptr_t head)
     printf("NULL <-> ");
     while (curr_node != NULL)
     {
-        printf("%c <-> ", curr_node->data);
+        __data_display__(curr_node->data);
+        printf(" <-> ");
         curr_node = curr_node->next;
     }
     printf("NULL\n");

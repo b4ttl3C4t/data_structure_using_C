@@ -1,5 +1,5 @@
-#ifndef DOUBLY_LINKED_LIST_H
-#define DOUBLY_LINKED_LIST_H
+#ifndef SINGLY_LINKED_LIST_H
+#define SINGLY_LINKED_LIST_H
 
 #include "node_data.h"
 
@@ -11,7 +11,6 @@
 struct node
 {
     data_ptr_t data;
-    struct node *prev;
     struct node *next;
 };
 
