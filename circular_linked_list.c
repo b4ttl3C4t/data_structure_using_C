@@ -4,22 +4,14 @@ int main(void)
 {
     node_ptr_t head = NULL;
 
-    insertion(&head, __data__('B', 'B', 'B'));
-    print_list(head);
-    insertion(&head, __data__('A', 'A', 'A'));
-    print_list(head);
-    insertion(&head, __data__('D', 'D', 'D'));
-    print_list(head);
-    reverse(&head);
-    print_list(head);
-    deletion(&head, __data__('D', 'D', 'D'));
-    print_list(head);
-    deletion(&head, __data__('C', 'C', 'C'));
-    print_list(head);
-    deletion(&head, __data__('B', 'B', 'B'));
-    print_list(head);
-    deletion(&head, __data__('A', 'A', 'A'));
-    print_list(head);
+    insertion(&head, __data__('B', 'B', 'B'));    print_list(head);
+    insertion(&head, __data__('A', 'A', 'A'));    print_list(head);
+    insertion(&head, __data__('D', 'D', 'D'));    print_list(head);
+    reverse(&head);    print_list(head);
+    deletion(&head, __data__('D', 'D', 'D'));    print_list(head);
+    deletion(&head, __data__('C', 'C', 'C'));    print_list(head);
+    deletion(&head, __data__('B', 'B', 'B'));    print_list(head);
+    deletion(&head, __data__('A', 'A', 'A'));    print_list(head);
 }
 
 // According to input data, insert it alphabetically.
@@ -41,28 +33,27 @@ void insertion(node_ptr_t *head, data_t input)
     }
 
     __data_copy__(new_node->data, &input);
-    node_ptr_t prev_node = NULL;
-    node_ptr_t curr_node = *head;
+    
+    // Insert the head node when there is no node in the list.
+	if (is_empty(*head))
+    {
+        *head = new_node;
+        (*head)->next = *head;
+        return;
+    }
+    
+    node_ptr_t prev_node = *head;
+    node_ptr_t curr_node = (*head)->next;
 
-    // Find the location of what the input data should be.
-    do
+    // Find the location of the end.
+    while (curr_node != *head)
     {
         prev_node = curr_node;
         curr_node = curr_node->next;
-    } while (curr_node != *head && __data_compare__(&input, curr_node->data));
+    }
 
-    /* If the location is the head node, then prev_node will be head node,
-     * and replace head node by the new one. */
-    if (prev_node == *head)
-    {
-        new_node->next = *head;
-        *head = new_node;
-    }
-    else
-    {
-        new_node->next = curr_node;
-        prev_node->next = new_node;
-    }
+    new_node->next = curr_node;
+    prev_node->next = new_node;
 }
 
 // According to value, remove the corresponding node.
@@ -72,35 +63,54 @@ void deletion(node_ptr_t *head, data_t value)
     {
         return;
     }
-
-    // If the value is identical to data in head node.
+	
+	// If the value is identical to data in head node.
     if (__data_compare__((*head)->data, &value) == 0)
-    {
-        node_ptr_t temp_node = *head;
-        *head = (*head)->next;
-        free(temp_node);
-        return;
+	{
+		// if the head is the only element in list.
+		if((*head)->next == *head)
+		{
+			free(*head);
+	        *head = NULL;
+	        return;
+		}
+		else
+		{
+		    node_ptr_t curr_node = (*head)->next;
+			
+		    // Find the location of the end.
+		    while (curr_node->next != *head)
+		    {
+		        curr_node = curr_node->next;
+		    }
+		    
+		    // Replace the head node and redirect the tail's next pointer to newer head.
+			node_ptr_t temp_node = *head;
+			*head = (*head)->next;
+			curr_node->next = *head;
+			free(temp_node);
+			
+	        return;
+		}
     }
 
     node_ptr_t temp_node;
-    node_ptr_t prev_node = NULL;
+    node_ptr_t prev_node = *head;
     node_ptr_t curr_node = (*head)->next;	// The head node has already checked.
 
     // Find the location of the node which data is the value.
-    while (curr_node != *head && __data_compare__(curr_node->data, &value) != 0)
+    while (curr_node->next != *head && 
+	       __data_compare__(curr_node->data, &value) != 0)
     {
         prev_node = curr_node;
         curr_node = curr_node->next;
     }
 
-    /* If there is the searched node,
-     * then set the next pointer of the prevent node,
-     * and delete the current node. */
-    if (curr_node != *head)
+    // Delete the node within the list only if its value is found.
+    if (__data_compare__(curr_node->data, &value) == 0)
     {
-        temp_node = curr_node;
         prev_node->next = curr_node->next;
-        free(temp_node);
+        free(curr_node);
         return;
     }
 }
@@ -114,20 +124,21 @@ void reverse(node_ptr_t *head)
 
     node_ptr_t prev_node = NULL;
     node_ptr_t next_node = NULL;
-    node_ptr_t curr_node = (*head)->next;   // Although the head node has already checked, you still reverse it.
+    node_ptr_t curr_node = *head;// Although the head node has already checked, you still reverse it.
     
-	// In this case, you could only suppose curr_node is not head node.
-    while (curr_node != *head)
+	// In this case, you could only suppose curr_node is not HEAD.
+    do
     {
-        // Operate the current node only when it's not head node.
+        // Operate the current node only when it's not HEAD.
         next_node = curr_node->next;
         curr_node->next = prev_node;
 
         prev_node = curr_node;
         curr_node = next_node;
-    }
-
-    *head = prev_node;
+    } while (curr_node != *head);
+	
+    (*head)->next = prev_node;
+	*head = prev_node;
 }
 
 bool is_empty(node_ptr_t head)
@@ -139,17 +150,17 @@ void print_list(node_ptr_t head)
 {
     if (is_empty(head))
     {
-        printf("head\n");
+        printf("NULL\n");
         return;
     }
-    node_ptr_t curr_node = head;
-
-    printf("(head)");
+	
+	node_ptr_t curr = head;
+	printf("(HEAD)");
     do
     {
-        __data_display__(curr_node);
+        __data_display__(curr->data);
         printf(" --> ");
-        curr_node = curr_node->next;
-    } while (curr_node != head);
-    printf("(head)\n");
+        curr = curr->next;
+    } while(curr != head);
+    printf("(HEAD)\n");
 }

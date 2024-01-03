@@ -4,26 +4,14 @@ int main(void)
 {
     node_ptr_t head = NULL;
 
-    insertion(&head, __data__('B', 'B', 'B'));
-    print_list(head);
+    insertion(&head, __data__('B', 'B', 'B'));    print_list(head);
+    insertion(&head, __data__('A', 'A', 'A'));    print_list(head);
+    insertion(&head, __data__('D', 'D', 'D'));    print_list(head);
 	reverse(&head); print_list(head);
-    insertion(&head, __data__('A', 'A', 'A'));
-    print_list(head);
-	reverse(&head); print_list(head);
-    insertion(&head, __data__('D', 'D', 'D'));
-    print_list(head);
-	reverse(&head); print_list(head);
-    insertion(&head, __data__('S', 'S', 'S'));
-    print_list(head);
-	reverse(&head); print_list(head);
-    deletion(&head, __data__('D', 'D', 'D'));
-    print_list(head);
-    deletion(&head, __data__('C', 'C', 'C'));
-    print_list(head);
-    deletion(&head, __data__('B', 'B', 'B'));
-    print_list(head);
-    deletion(&head, __data__('A', 'A', 'A'));
-    print_list(head);
+    deletion(&head, __data__('D', 'D', 'D'));    print_list(head);
+    deletion(&head, __data__('C', 'C', 'C'));    print_list(head);
+    deletion(&head, __data__('B', 'B', 'B'));    print_list(head);
+    deletion(&head, __data__('A', 'A', 'A'));    print_list(head);
 }
 
 void insertion(node_ptr_t *head, data_t input)
@@ -53,43 +41,16 @@ void insertion(node_ptr_t *head, data_t input)
     }
 
     node_ptr_t curr_node = *head;
-
-    while (curr_node->next != NULL && __data_compare__(&input, curr_node->data) > 0)
+    
+    while (curr_node->next != NULL)
     {
         curr_node = curr_node->next;
     }
 	
-	/* 
 	// Insert the node in the tail directly.
 	new_node->prev = curr_node;
     new_node->next = NULL;
     curr_node->next = new_node;
-    */
-	
-	// If you want to insert the node alphabetically, the code is as follows:
-    // Insert from the head of the list, exclude the special case.
-    if (curr_node == *head)
-    {
-        new_node->prev = NULL;
-        new_node->next = *head;
-        (*head)->prev = new_node;
-        *head = new_node;
-    }
-    // Insert from the tail of the list, exclude the special case.
-    else if (curr_node->next == NULL)
-    {
-        new_node->prev = curr_node;
-        new_node->next = NULL;
-        curr_node->next = new_node;
-    }
-    // Insert from the node within the list.
-    else
-    {
-        new_node->prev = curr_node->prev;
-        new_node->next = curr_node;
-        curr_node->prev->next = new_node;
-        curr_node->prev = new_node;
-    }
 }
 
 void deletion(node_ptr_t *head, data_t value)
@@ -99,24 +60,25 @@ void deletion(node_ptr_t *head, data_t value)
         return;
     }
 
-    // Delete the head node when it's the one only node in the list.
-    if (__data_compare__((*head)->data, &value) == 0 && 
-        (*head)->next == NULL)
+    if (__data_compare__((*head)->data, &value) == 0)
     {
-        free(*head);
-        *head = NULL;
-        return;
-    }
-    // Delete the head of the list, and exclude the special case.
-    else if (__data_compare__((*head)->data, &value) == 0)
-    {
-        free((*head)->next->prev);
-		(*head)->next->prev = NULL;
-		*head = (*head)->next;
-        return;
+		if((*head)->next == NULL)
+		{// If the value is identical to data in head node.
+			free(*head);
+	        *head = NULL;
+	        return;
+		}
+		else
+		{// Delete the head of the list, and exclude the special case.
+			*head = (*head)->next;
+			free((*head)->prev);
+			(*head)->prev = NULL;
+	        return;
+		}
     }
 
     node_ptr_t curr_node = *head;
+    
     while (curr_node->next != NULL && 
            __data_compare__(curr_node->data, &value) != 0)
     {
