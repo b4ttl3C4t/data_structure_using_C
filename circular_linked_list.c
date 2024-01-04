@@ -87,14 +87,14 @@ void deletion(node_ptr_t *head, data_t value)
 		    // Replace the head node and redirect the tail's next pointer to newer head.
 			node_ptr_t temp_node = *head;
 			*head = (*head)->next;
-			curr_node->next = *head;
 			free(temp_node);
 			
+			// Replace head node with newer head.
+			curr_node->next = *head;
 	        return;
 		}
     }
 
-    node_ptr_t temp_node;
     node_ptr_t prev_node = *head;
     node_ptr_t curr_node = (*head)->next;	// The head node has already checked.
 
@@ -154,13 +154,14 @@ void print_list(node_ptr_t head)
         return;
     }
 	
-	node_ptr_t curr = head;
+	node_ptr_t curr_node = head;
+	
 	printf("(HEAD)");
     do
     {
-        __data_display__(curr->data);
+        __data_display__(curr_node->data);
         printf(" --> ");
-        curr = curr->next;
-    } while(curr != head);
+        curr_node = curr_node->next;
+    } while(curr_node != head);
     printf("(HEAD)\n");
 }

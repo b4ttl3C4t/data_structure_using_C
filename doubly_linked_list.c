@@ -62,14 +62,16 @@ void deletion(node_ptr_t *head, data_t value)
 
     if (__data_compare__((*head)->data, &value) == 0)
     {
+    	// if the head is the only element in list.
 		if((*head)->next == NULL)
-		{// If the value is identical to data in head node.
+		{
 			free(*head);
 	        *head = NULL;
 	        return;
 		}
+		// Delete the head of the list
 		else
-		{// Delete the head of the list, and exclude the special case.
+		{
 			*head = (*head)->next;
 			free((*head)->prev);
 			(*head)->prev = NULL;
@@ -77,7 +79,7 @@ void deletion(node_ptr_t *head, data_t value)
 		}
     }
 
-    node_ptr_t curr_node = *head;
+    node_ptr_t curr_node = (*head)->next;	// The head node has already checked.
     
     while (curr_node->next != NULL && 
            __data_compare__(curr_node->data, &value) != 0)
@@ -117,7 +119,7 @@ void reverse(node_ptr_t *head)
     	return;
 	}
     
-	node_ptr_t curr_node = (*head)->next;
+	node_ptr_t curr_node = *head;
     node_ptr_t temp_node;
     
 	// Handle the head of the list.
@@ -130,6 +132,7 @@ void reverse(node_ptr_t *head)
         temp_node = curr_node->next;
         curr_node->next = curr_node->prev;
         curr_node->prev = temp_node;
+        
         curr_node = temp_node;
     }
 	*head = curr_node;
